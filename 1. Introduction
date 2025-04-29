@@ -1,0 +1,20 @@
+What is Django?
+Django is a python-based framework used to build web applications rapidly.
+It follows the MVT(Model-view-Template) architecture.
+Web development with light weight webserver.
+
+Why learn Django?
+-- Rapid development
+-- scalability -- It can support lakh users.
+-- Security
+-- Industry Demand
+-- Versatility -- used to large scale , medium scale etc
+-- Built in Admin Interface
+-- Community support (started in 2003)
+
+Prerequisite to attend this course?
+Python, HTML & CSS, Database.
+
+Objective
+Explore full-stack web development with hands-on project experience.
+Transform the experience as a website user journey into expertise as a website developer.

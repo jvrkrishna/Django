@@ -1,0 +1,66 @@
+A web application architecture in Python using Django typically follows a Model-View-Template (MVT) pattern and includes several integrated components for handling requests, processing data, rendering responses, and managing data storage.
+
+🧱 Django Web Application Architecture Overview
+1. Client (Frontend / Browser)
+Sends HTTP requests to the server
+
+Receives HTML/CSS/JS or JSON responses (if using an API)
+Can be traditional HTML rendered by Django or a frontend SPA (React, Vue, etc.)
+
+2. Web Server (e.g., Nginx, Apache)
+Receives incoming requests from the client
+Forwards them to the WSGI application server
+
+3. WSGI Server (e.g., Gunicorn, uWSGI)
+Acts as a bridge between the web server and Django
+Runs the Django app and returns HTTP responses
+
+4. Django Application (Core)
+a. URL Dispatcher (urls.py)
+Maps incoming URLs to views
+
+b. Views (views.py)
+Handles logic for requests
+Communicates with models
+Returns responses (HTML, JSON, etc.)
+
+c. Models (models.py)
+Defines the structure of data (ORM)
+Maps to database tables
+
+d. Templates (templates/)
+HTML templates with Django’s template language
+Rendered by views to return to the client
+
+e. Forms (forms.py)
+Used for input validation and form rendering
+
+f. Middleware
+Intercepts requests/responses for additional processing (e.g., authentication, logging)
+
+5. Database
+Supported: PostgreSQL, MySQL, SQLite, Oracle
+Django ORM manages database interactions
+
+6. Static & Media Files
+Managed separately using Django’s staticfiles system or external storage (AWS S3, etc.)
+
+🔁 Django Request-Response Cycle
+[Client] → [Nginx] → [Gunicorn (WSGI)] → [Django]
+→ URL Routing → View → Model → (Optional) Template → Response
+→ [Client]
+
+📦 Optional Components
+Celery + Redis: For background tasks (e.g., sending emails)
+Django REST Framework (DRF): For building RESTful APIs
+Docker: For containerizing the application
+CI/CD Tools: GitHub Actions, GitLab CI for automated deployment
+
+📊 Sample Stack for Django Web App
+Layer	Technology
+Frontend	HTML/CSS + JS / React
+Backend	Django
+Server	Gunicorn + Nginx
+Database	PostgreSQL
+Async Tasks	Celery + Redis
+Deployment	Docker + AWS

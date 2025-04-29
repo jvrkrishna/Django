@@ -1,0 +1,47 @@
+Application:
+    --An application is a software program used to perform specific tasks.
+    --An application provide different services to the user.
+    --It can either with or without an internet connection.
+    Examples: Calculator, Web browser, VLC player.
+
+Applications are divided into two types.
+1. Standalone Application
+2. Web Application
+
+1. Standalone Applications:
+    --Standalone appliaction are installable software that can run independently without requiring an internet connection.
+    --Standalone applications have all their essential components bundled together, so they don't depend on anything external.
+    --Standalone applications are self-sufficient, utilizing hardware and resources from the local machine, and do not depend on external hardware or resources from other devices.
+    --Users need to manually install updates for standalone applications because they don't get updated automatically from the internet.
+    Example: Offline text editors, music players, calculators, and simple games are common examples of standalone applications.
+
+Web Applications:
+    --Web application are multiuser applications, meaning that multiple users can interact with the application simultaneously.
+
+    --A web application, or web app, is a type of software program that operates on a web server and is accessed through a web browser.
+
+    --You don't need to download or install a web app on your computer; you can just go to a website by typing its URL to use it.
+
+    --Example: Web applications like Gmail, YouTube, Facebook, Amazon, and Google Docs are accessed through a web browser, and these are common examples of web applications.
+
+    --Web applications require an internet connection because they depend on resources available on remote servers.
+    
+    --Web applications update automatically, so users always have the latest version when they use them in their web browser.
+
+    --Entire world can access web application, while specific user can access standalone application.
+
+Types of web application
+    --Web applications can be broadly categorized into two main types: static and dynamic.
+
+Static web application:
+    --The output of a static web application is the same for all users.
+    --Static web applications are typically built using HTML, CSS, and JavaScript.
+    --Developers use HTML, CSS, and JavaScript to create static web pages that show content to users without needing server-side processing.
+
+Dynamic web application:
+    --The output of a dynamic web application can vary based on factors such as user actions, geographic location, time, or search queries.
+    --Dynamic web applications are commonly built using server-side programming frameworks such as Django (Python), Laravel (PHP), Spring (Java), and others.
+
+    
+
+

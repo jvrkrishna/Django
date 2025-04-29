@@ -1,0 +1,18 @@
+--A web framework is a software platform that provides a structured way to build and manage web applications.
+--A framework is a comprehensive collection of reusable components and guidelines that simplify development process, making it efficient, easy to maintain, and following best practices.
+--The goal of a framework is to enable developers to focus on building unique features and functionalities for their applications. On the other hand the framework, handles the common, repetitive tasks involved in web development.
+--There are several web framework available for different programming languages to develop web applications.
+
+Python -----Django, Flask, FastAPI
+Java -------Springboot, struts, Grails
+Javascript--Angular, Next.js, Express.js
+
+Advantages of framework:
+    --No need to start from scratch.
+    --Accelerated development process.
+    --Save time.
+    --Focus on Business Logic.
+    --Ecosystem Integration.
+    --Debugging Assistance.
+    --Testing Support etc.
+
