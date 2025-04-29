@@ -9,7 +9,7 @@ Applications are divided into two types.
 2. Web Application
 
 1. Standalone Applications:
-    --Standalone appliaction are installable software that can run independently without requiring an internet connection.
+    --Standalone application are installable software that can run independently without requiring an internet connection.
     --Standalone applications have all their essential components bundled together, so they don't depend on anything external.
     --Standalone applications are self-sufficient, utilizing hardware and resources from the local machine, and do not depend on external hardware or resources from other devices.
     --Users need to manually install updates for standalone applications because they don't get updated automatically from the internet.
