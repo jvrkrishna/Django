@@ -18,3 +18,23 @@ Python, HTML & CSS, Database.
 Objective
 Explore full-stack web development with hands-on project experience.
 Transform the experience as a website user journey into expertise as a website developer.
+
+Introduction to django
+    --Django is a web framework used to build web applications.
+    --Django, built with Python, enhances developer satisfaction due to Python's user-friendly nature and straightforward approach to programming.
+    --Django is an open-source framework, available for free and without the need for a license.
+    --Django is high-level web framework for rapid development.
+    --The term "high-level web framework" refers to Django's ability to internally manage complex and repetitive tasks, freeing developers from these concerns so they can focus on creating new features for their applications.
+    --Django follows Rapid Application Development (RAD) principles.
+    --Django offers a variety of built-in features and a well-organized folder structure that facilitates rapid development of web applications.--Django follows the Model-View-Template (MVT) architectural pattern.--Django's MVT architecture separates data (Model), user interface (Template), and logic (View) for clear and efficient development.
+    --Django promotes Don't repeat yourself (DRY) principles for efficient, maintainable code redundancy and maximum reusability.
+
+The Rise of Django
+    --Django was created by the web development team at the Lawrence Journal-World newspaper in Kansas, USA, with the specific goal of effectively constructing and managing their news website.
+    --Django was primarily developed by Adrian Holovaty, Simon Willison, and Jacob Kaplan-Moss between 2003 and 2005.
+    --After their collaboration, Django was first publicly released on 21 July 2005, setting a new standard in web development frameworks.
+    --Django is named after the famous jazz guitarist Django Reinhardt.
+    --Adrian Holovaty named the framework in tribute to Reinhardt's music while listening to his albums during Django's development phase.
+    --The correct pronunciation of Django is "JANG-goh".
+    --The Django Software Foundation (DSF) maintains Django, ensuring its continuous development, stability, and community engagement.
+    --The official website of Django is https://www.djangoproject.com/
