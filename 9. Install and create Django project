@@ -16,4 +16,23 @@ Note: We can also use other package managers apart from pip, such as conda, Poer
 Create First Django Project:
     --Create a folder named as "Django Projects".
     --Inside "Django Projects" directory create a sub directory names as "0001_projectName"
-    --Open "0001_projectName" direcotry in vscode.
+    --Open "0001_projectName" directory in vscode.
+    --Open Terminal in vscode run the below command
+    PS C:\Users\jvrkr\git_repo\Django_projects\0001> django-admin startproject FirstProject
+    --It will create below pattersn
+    FirstProject
+        ||
+    FirstProject ----- manage.py
+        ||
+    __init__.py
+    asgi.py
+    settings.py
+    urls.py
+    wsgi.py
+
+    Now open and run below
+    PS C:\Users\jvrkr\git_repo\Django_projects\0001\FirstProject> python manage.py runserver
+
+    It will give one link like http://127.0.0.1:8000/
+
+    To stop the server ----- just ctrl+c in Terminal
