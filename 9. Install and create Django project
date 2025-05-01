@@ -1,0 +1,19 @@
+Required softwares
+    --python (python --version)
+    --pip (pip --version)
+Install Django:
+    --pip install django (or)
+    --pip install django==<version_number>
+
+What is pip?
+    --pip refers to the package instgaller for python.
+    --pip helps you install these external package from various sources, but the most common source is the python package index(PYPI).
+
+What is PYPI?
+    --PYPI is a vast repository that as of may 2025, contains well over 3,00,000 third party python packages.
+Note: We can also use other package managers apart from pip, such as conda, Poerty, pipenv.
+
+Create First Django Project:
+    --Create a folder named as "Django Projects".
+    --Inside "Django Projects" directory create a sub directory names as "0001_projectName"
+    --Open "0001_projectName" direcotry in vscode.
