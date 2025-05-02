@@ -6,7 +6,7 @@ Install Django:
     --pip install django==<version_number>
 
 What is pip?
-    --pip refers to the package instgaller for python.
+    --pip refers to the package installer for python.
     --pip helps you install these external package from various sources, but the most common source is the python package index(PYPI).
 
 What is PYPI?
