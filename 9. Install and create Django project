@@ -89,5 +89,14 @@ production development purposes only. We focus on web frameworks, not web server
 
 The development server automatically reloads Python code for each request, ensuring updates are reflected instantly.
 
+Django Project vs Django Application:
+    Django Project:
+        --A Django project is a collection of Django applications, along with settings and configuration files.
+    Ex: Project= Collection of applications+setting with config files.
+
+    Django Application:
+        --A Django application is a component of a Django project, with each application serving a specific purpose.
+        --Django application are designed to be reusable and can be integrated with other applications with in the same project or across different Django projects.
+
 
     
