@@ -1,0 +1,63 @@
+Project No: 0002
+Project Name: WelcomeProject
+******************************************************
+Step 1: Create Django Project 
+	Django-admin startproject WelcomeProject
+
+Step 2: Enter into the project 
+        cd WelcomeProject 
+
+Step 3: Create django application 
+	py manage.py startapp WishApp
+
+Step 4: Django does not aware about our WishApp Appllication so installed it in settings.py file 
+
+WelcomeProject/WelcomeProject/settings.py
+-----------------------------------------
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'WishApp',
+]
+
+Setp 5: Define view function 
+
+WelcomeProject/WishApp/views.py 
+-------------------------------
+from django.shortcuts import render,HttpResponse
+
+# Create your views here.
+def wish_view(request):
+    return HttpResponse('Welcome to Django App')
+
+def wish_me_view(request):
+    return HttpResponse('Hi Surendra Welcome to Django App')
+
+def thank_you_view(request):
+    return HttpResponse('Thank you for visit our Django App')
+
+
+Step 6: Define url pattren
+
+WelcomeProject/WelcomeProject/urls.py
+-------------------------------------
+from django.contrib import admin
+from django.urls import path
+from WishApp import views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('wish/',views.wish_view),
+    path('wish_me/',views.wish_me_view),
+    path('thank_you/',views.thank_you_view),
+]
+
+Step 7: Start developement server and send HTTP Request
+	Py manage.py runserver
+	
+	http://127.0.0.1:8000/wish/
+	http://127.0.0.1:8000/wish_me/
+	http://127.0.0.1:8000/thank_you/
