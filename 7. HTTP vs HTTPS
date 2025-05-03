@@ -55,5 +55,5 @@ HTTP vs HTTPS
     --HTTPS uses encryption protocols like TLS (Transport Layer Security) or SSL (Secure Sockets Layer) to secure data transmitted between clients and servers.
 
 Password sending using HTTP VS HTTPS:
-    --HTTP: Sends the password "Surendra@123" as plain text, easily readable by anyone who captures the network data.
-    --HTTPS: Encrypts the password "Surendra@123" (for example, to "9hdgfhdfe5a8d6b39a14c53b76f3f8"), making it extremely difficult for anyone to decode if someone captures the network data.
+    --HTTP: Sends the password "Ram@123" as plain text, easily readable by anyone who captures the network data.
+    --HTTPS: Encrypts the password "Ram@123" (for example, to "9hdgfhdfe5a8d6b39a14c53b76f3f8"), making it extremely difficult for anyone to decode if someone captures the network data.

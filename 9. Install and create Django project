@@ -36,3 +36,57 @@ Create First Django Project:
     It will give one link like http://127.0.0.1:8000/
 
     To stop the server ----- just ctrl+c in Terminal
+
+What is django-admin and startproject?
+--django-admin is Django's command-line utility for managing projects.
+--startproject is django-admin subcommand that creates a new Django project.
+
+Directory structure of a Django project:
+Outer Directory (MyFirstProject/):
+    --This is the container for your project. It holds your entire django project.
+    --You can rename this directory to anything you like; Django doesn't care about its name.
+
+manage.py:
+    --This file is a command-line utility/tool for managing your Django project. It manage your project from the command line.
+    --It helps you start development servers, Performing database migrations, Applying database changes and perform other administrative tasks.
+
+Inner Directory (MyFirstProject/):
+    --This directory is where your Django project is defined as a Python package.
+
+_init__.py:
+    --An empty file that tells Python this directory is a Python package.
+    --It's necessary for Python to recognize this directory as part of your Django project.
+
+settings.py:
+    --This file contains all configuration settings for your Django project.
+
+urls.py:
+    --This file defines the URLs (web addresses) for your Django project.
+
+asgi.py:
+    --Manages asynchronous web requests for your Django application.
+
+wsgi.py:
+    --Handles communication between your Django application and web servers to serve web pages.
+
+The development server:
+    --Let's verify your Django project works
+
+Open Terminal/CMD
+    --Navigate to Project Directory (cd MyFirstProject)
+
+Run server: python manage.py runserver
+    --Open Browser: Go to http://127.0.0.1:8000/ or http://localhost:8000/ in your web browser.
+
+You'll see a "Congratulations!"page, with a rocket taking off. It worked!
+
+Note: Ignore any warnings about unapplied database migrations for now; we'll handle the database later.
+
+You've started the Django development server, a lightweight web server written in Python. It allows rapid development without needing to configure a production server like Apache until you're ready for production.
+
+Now's a good time to mention do not use this server in a production environment. It's designed for
+production development purposes only. We focus on web frameworks, not web servers. (statement from django official documentations)
+
+The development server automatically reloads Python code for each request, ensuring updates are reflected instantly.
+
+    
