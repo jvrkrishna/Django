@@ -19,7 +19,7 @@ Create First Django Project:
     --Open "0001_projectName" directory in vscode.
     --Open Terminal in vscode run the below command
     PS C:\Users\jvrkr\git_repo\Django_projects\0001> django-admin startproject FirstProject
-    --It will create below pattersn
+    --It will create below pattern
     FirstProject
         ||
     FirstProject ----- manage.py
