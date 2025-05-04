@@ -8,9 +8,9 @@ Step 2: Enter into the project
         cd WelcomeProject 
 
 Step 3: Create django application 
-	py manage.py startapp WishApp
+	py manage.py startapp Wishapp
 
-Step 4: Django does not aware about our WishApp Appllication so installed it in settings.py file 
+Step 4: Django does not aware about our Wishapp Appllication so installed it in settings.py file 
 
 WelcomeProject/WelcomeProject/settings.py
 -----------------------------------------
@@ -41,7 +41,7 @@ def thank_you_view(request):
     return HttpResponse('Thank you for visit our Django App')
 
 
-Step 6: Define url pattren
+Step 6: Define url pattern
 
 WelcomeProject/WelcomeProject/urls.py
 -------------------------------------
