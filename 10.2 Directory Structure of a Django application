@@ -1,0 +1,22 @@
+Directory Structure of a Django App:
+    Outer Directory/app_name:
+        --This is the application folder, which contains all the files and folders related to the specific application within the Django Project.
+
+    Migrations:
+        --Migrations are Python files that define database schema changes.
+        --These files are stored with in a migrations folder inside each Django app.
+
+    admin.py:
+        --Used to register model so that it can be access inside Django admin interface.
+
+    apps.py:
+        --apps.py defines the configuration settings for a Django application.
+
+    models.py:
+        --models.py is used to define model classes in Django, where each model class represents a database table.
+    
+    tests.py:
+        --tests.py in Django is used to write test cases for your application to ensure its functionality behaves as expected.
+
+    views.py:
+        --Inside views.py you define functions or classes that handle requests and generate the responses.
