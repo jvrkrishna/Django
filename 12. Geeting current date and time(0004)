@@ -1,0 +1,93 @@
+Project No: 0004
+Project Name: Getting current date and time in django
+******************************************************
+Step 1: Project Creation
+	django-admin startproject DateTimeProject 
+
+Step 2: Enter into the project
+	cd DateTimeProject 
+
+Step 3: Create the application 
+	py manage.py startapp DateTimeApp
+
+Step 4: Install the application inside settings.py file 
+
+DateTimeProject/DateTimeProject/settings.py 
+---------------------------------------------
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'DateTimeApp',
+]
+
+Step 5: Define the view function 
+
+DateTimeProject/DateTimeApp/views.py
+------------------------------------
+from django.shortcuts import render,HttpResponse
+import datetime
+# Create your views here.
+def date_time_view(request):
+    dt=datetime.datetime.now()
+    data=f"""
+    <html>
+        <head>
+            <title>
+                Datetime Application
+            </title>
+        </head>
+        <body>
+            <h1>Current Date and Time Information</h1>
+            <p>Date and Time : {dt}</p>
+            <p>Month : {dt.month}</p>
+            <p>Day : {dt.day}</p>
+            <p>Hour : {dt.hour}</p>
+            <p>Minute: {dt.minute}</p>
+            <p>Second: {dt.second}</p>
+            <p>Microsecond: {dt.microsecond}</p>
+            <p>---------------</p>
+            <p>Short Day Name : {dt.strftime('%a')}</p>
+            <p>Full Day Name : {dt.strftime('%A')}</p>
+            <p>Week Number : {dt.strftime('%W')}</p>
+            <p>Day Number : {dt.strftime('%w')}</p>
+            <p>Month Number : {dt.strftime('%m')}</p>
+        </body>
+    </html>
+    """
+    return HttpResponse(data)
+
+Step 6: Configure URL pattren 
+
+DateTimeProject/DateTimeProject/urls.py
+---------------------------------------
+from django.contrib import admin
+from django.urls import path
+from DateTimeApp import views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('get_date_time',views.date_time_view),
+]
+
+
+Step 7: Start the developement server and send HTTP request to the server 
+	py manage.py runserver 
+	Send Request : http://127.0.0.1:8000/get_date_time 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
