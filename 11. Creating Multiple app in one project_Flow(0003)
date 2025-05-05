@@ -1,0 +1,111 @@
+Project No: 0003
+Project Name: Creating multiple app in one project
+0003_Creating Multiple app in one project_Flow******************************************************
+
+Step 1: Create the django project 
+	django-admin startproject HIETECH
+
+Step 2: Enter into the project 
+	cd HIETECH
+
+Step 3: Create django application 
+	py manage.py startapp Students
+	py manage.py startapp Fees
+	py manage.py startapp Courses
+
+
+and install it inside settings.py file 
+	
+HIETECH/HIETECH/settings.py
+------------------------------
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'Students',
+    'Fees',
+    'Courses',
+]
+	
+
+Step 4: Define view function for Students app, Fees app and Courses app
+
+HIETECH/Students/views.py
+---------------------------
+from django.shortcuts import render,HttpResponse
+
+# Create your views here.
+def student_view(request):
+    return HttpResponse('<h1>Hello you are in the student section of Hie tech </h1>')
+
+HIETECH/Fees/views.py
+---------------------------
+from django.shortcuts import render,HttpResponse
+
+# Create your views here.
+def fees_view(request):
+    return HttpResponse('<h1>Hello you are in the fees section of Hie Tech </h1>')
+
+HIETECH/Courses/views.py
+---------------------------
+from django.shortcuts import render,HttpResponse
+
+# Create your views here.
+def course_view(request):
+    return HttpResponse('<h1>Hello you are in the course section of Hie Tech </h1>')
+
+
+
+Step 5: Define URL pattern 
+
+HIETECH/HIETECH/urls.py
+--------------------------
+from django.contrib import admin
+from django.urls import path
+from Students import views as v1
+from Fees import views as v2
+from Courses import views as v3
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('students/',v1.student_view),
+    path('fees/',v2.fees_view),
+    path('courses/',v3.course_view),
+]
+
+Note :: Here v1, v2 and v3 are the alish name of views. If we will not uses these alish name then django by defaullt consider the last view then we will get attribute error because of naming conflict problem 
+
+
+Step 6: Start Developement Server and send HTTP request.
+	py manage.py runserver 
+	
+	send request:
+	http://127.0.0.1:8000/students/
+	http://127.0.0.1:8000/fees/
+	http://127.0.0.1:8000/courses/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
