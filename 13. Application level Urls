@@ -1,0 +1,7 @@
+Application-level URLs
+    --When working on a Django project with multiple applications, It's not recommended to define URL patterns for each application at the project level. Instead, it's best to define these URL patterns at the application level.
+    --This approach allows eaxh application's routing to be handled separately, making our project more organized, easier to manage, and more flexible.
+
+Use of include() function in project level:
+    --The include() function is used to include the urls.py file from the application level in to the project-level ulrs.py file.
+    --This allows us to integrate the application's URL pattern in to the main project's routing system.
