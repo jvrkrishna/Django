@@ -1,0 +1,125 @@
+Project No: 0005
+Project Name: Application level URLs
+*************************************
+Step 1: Create project 
+	django-admin startproject NewsProject
+
+Step 2: Enter into the project 
+	cd NewsProject 
+
+Step 3: Create 3 different application 
+	py manage.py startapp CricketNewsApp
+	py manage.py startapp HockeyNewsApp
+	py manage.py startapp TechNewsApp
+
+Step 4: Install all 3 application inside settings.py file 
+NewsProject/NewsProject/settings.py
+------------------------------------
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'CricketNewsApp',
+    'HockeyNewsApp',
+    'TechNewsApp',
+]
+ 
+
+Step 5: Define the view function for each application 
+
+NewsProject/CricketNewsApp/views.py
+-----------------------------------
+from django.shortcuts import render,HttpResponse
+
+# Create your views here.
+def cricket_view(request):
+    return HttpResponse('<h1>Tahlia McGrath wraps series 3-0 for Australia A after India A batting crumbles</h1>')
+
+
+NewsProject/HockeyNewsApp/views.py
+-----------------------------------
+from django.shortcuts import render,HttpResponse
+# Create your views here.
+def hockey_news(request):
+    return HttpResponse('<h1> Canada players celebrate with their gold medals after defeating Sweden in the mens ice hockey gold </h1>')
+
+
+NewsProject/TechNewsApp/views.py
+-----------------------------------
+from django.shortcuts import render,HttpResponse
+
+# Create your views here.
+def tech_view(request):
+    return HttpResponse('<h1>Independence Day sale on Amazon, Flipkart: Best deals on smartphones, laptops, smart TVs here</h1>')
+
+
+
+Step 6: Create urls.py file inside each application folder
+
+Step 7: Define application level url 
+
+NewsProject/CricketNewsApp/urls.py
+-----------------------------------
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('cricket_news/', views.cricket_view),
+]
+
+
+NewsProject/HockeyNewsApp/urls.py
+-----------------------------------
+
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('hockey_news/', views.hockey_news),
+]
+
+NewsProject/TechNewsApp/urls.py
+-----------------------------------
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('tech_news/', views.tech_view),
+]
+
+
+Step 8: Include application level urls.py file in project level using include() function 
+
+NewsProject/NewsProject/urls.py
+-------------------------------
+from django.contrib import admin
+from django.urls import path,include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('CricketNewsApp/',include('CricketNewsApp.urls')),
+    path('HockeyNewsApp/',include('HockeyNewsApp.urls')),
+    path('TechNewsApp/',include('TechNewsApp.urls')),
+]
+
+
+Step 9: Start developement server and send HTTP request 
+	http://127.0.0.1:8000/CricketNewsApp/cricket_news/
+	http://127.0.0.1:8000/HockeyNewsApp/hockey_news/
+	http://127.0.0.1:8000/TechNewsApp/tech_news/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
