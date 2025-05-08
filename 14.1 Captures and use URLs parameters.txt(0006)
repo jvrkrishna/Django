@@ -1,0 +1,96 @@
+Project No: 0006
+Project Name: Captures and use URLs parameters
+**********************************************
+Step 1: Create project 
+	django-admin startproject CaptureParameters
+
+Step 2: Enter into the project 
+	cd CaptureParameters
+
+Step 3: Create django application 
+	py manage.py startapp App1
+
+Step 4: Install the application inside settings.py file 
+
+CaptureParameters/CaptureParameters/settings.py
+-----------------------------------------------
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'App1'
+]
+
+
+Step 5: Define the view function 
+CaptureParameters/App1/views.py
+--------------------------------
+from django.shortcuts import render,HttpResponse
+
+# Create your views here.
+def display_id(request,id):
+    return HttpResponse(id)
+
+def display_name(request,name):
+    return HttpResponse(name)
+
+def display_sal(request,sal):
+    sal=float(sal)
+    print(type(sal))
+    return HttpResponse(sal)
+def display_roll_name(request,roll,name):
+    return HttpResponse(f'Roll is : {roll} and Name is : {name}')
+
+
+Step 6: Define Project level urls
+CaptureParameters/CaptureParameters/urls.py
+--------------------------------------------
+from django.contrib import admin
+from django.urls import path,include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('App1/',include('App1.urls')),
+]
+
+
+Step 7: Define Application level urls
+CaptureParameters/App1/urls.py
+------------------------------
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('display_id/<int:id>/', views.display_id),
+    path('display_name/<str:name>/',views.display_name),
+    path('display_sal/<str:sal>/',views.display_sal),
+    path('display_roll_name/<int:roll>/<str:name>/',views.display_roll_name),
+]
+
+Step 8: Start developement server and send HTTP Request 
+	py manage.py runserver 
+	
+	send HTTP Request 
+	http://127.0.0.1:8000/App1/display_id/23/
+	http://127.0.0.1:8000/App1/display_name/ram/
+	http://127.0.0.1:8000/App1/display_sal/75000.73/
+	http://127.0.0.1:8000/App1/display_roll_name/23/ram/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

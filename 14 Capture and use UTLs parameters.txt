@@ -1,0 +1,6 @@
+Capture and use URLs Parameters:
+    --Capture parameters are used to extract dynamic values from URLs.
+    --These values are then passed to the view function to retrieve or manipulate information based on the captured value.
+    --You can use different types of capture parameters, like integers, strings, and slugs, to match parts of the URL.
+    --The name of the capture parameter in the URL pattern should match the parameter name in the view function to ensure proper mapping of the captured value.
+    --You can pass multiple values from a URL to a Django view by using multiple capture parameters in the URL pattern.
