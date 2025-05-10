@@ -1,0 +1,136 @@
+Project No: 0007
+Project Name: TemplateProject
+**********************************************
+Step 1: Create project 
+	django-admin startproject TemplateProject
+
+Step 2: Enter into the project 
+	cd TemplateProject
+
+Step 3: Create django application 
+	py manage.py startapp App1
+
+Step 4: Install the application inside settings.py file 
+
+TemplateProject/TemplateProject/settings.py
+-----------------------------------------------
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'App1'
+]
+
+Step 5: Define the view function 
+TemplateProject/App1/views.py
+--------------------------------
+from django.shortcuts import render,HttpResponse
+
+# Create your views here.
+def addAdmission(request):
+    return HttpResponse("<h1>This is add admission view.</h1>")
+
+def admissionReport(request):
+    return HttpResponse("<h1>this is admission report view</h1>")
+
+
+Step 6: Define Project level urls
+TemplateProject/TemplateProject/urls.py
+--------------------------------------------
+from django.contrib import admin
+from django.urls import path,include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('App1/',include('App1.urls')),
+]
+
+
+Step 7: Define Application level urls
+TemplateProject/App1/urls.py
+------------------------------
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('addA/', views.addAdmission),
+    path('admissionR/',views.admissionReport),
+]
+
+Steps to Create Template:
+----------------------------------
+    --Setup the templates folder
+----------------------------------
+Step 8: Create Project level templates folder and inside that create AppName folder
+    0007/TemplateProject>mkdir templates
+    0007/TemplateProject>cd templates
+    0007/TemplateProject>mkdir App1
+
+    --Setup DIRS in settings.py
+-----------------------------------
+Step 9:  Navigate to project level Settings and check the DIRS option within the TEMPLATES setting to make sure it includes the path to your templates directory.
+    Go to ---> 0007-->TemplateProject-->settings.py
+    --import os (Add this command in top of the content in setting.py)
+
+    TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+    --Create a template
+--------------------------------------
+Step 10: Now navigate to 0007-->TemplateProject-->templates-->App1
+    --Create template files and add html code
+    add-admission.html
+    admission-report.html
+
+add-admission.html
+    <html>
+    <head><title>Add-admission</title></head>
+    <body bgcolor="red">
+        This is add-admission Page
+    </body>
+    </html>
+
+admission-report.html
+<html>
+    <head><title>Admission-report</title></head>
+    <body bgcolor="green">
+        This is admission-Report Page
+    </body>
+</html>
+
+    --use template in views
+--------------------------------------
+Step 11: Now navigate to app level views and use the render() function to load and render your templates. Pass a context dictionary to the render() function containing the data you want to display in the template.
+
+from django.shortcuts import render
+
+# Create your views here.
+def addAdmission(request):
+    return render(request, 'App1/add-admission.html')
+
+def admissionReport(request):
+    return render(request, 'App1/admission-report.html')
+
+    --execute the project
+----------------------------------------------------
+Step 8: Start developement server and send HTTP Request 
+	py manage.py runserver 
+	
+	send HTTP Request 
+	http://127.0.0.1:8000/App1/addA
+	http://127.0.0.1:8000/App1/admissionR
+
