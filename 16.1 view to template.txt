@@ -30,12 +30,8 @@ VtoTProject/App1/views.py
 from django.shortcuts import render,HttpResponse
 
 # Create your views here.
-def addAdmission(request):
-    return HttpResponse("<h1>This is add admission view.</h1>")
-
-def admissionReport(request):
-    return HttpResponse("<h1>this is admission report view</h1>")
-
+def sample_view(request):
+    return HttpResponse("<h1>This is Sample view page.</h1>")
 
 Step 6: Define Project level urls
 VtoTProject/VtoTProject/urls.py
@@ -55,8 +51,7 @@ VtoTProject/App1/urls.py
 from django.urls import path
 from . import views
 urlpatterns = [
-    path('addA/', views.addAdmission),
-    path('admissionR/',views.admissionReport),
+    path('sample/', views.sample),
 ]
 
 Steps to Create Template:
