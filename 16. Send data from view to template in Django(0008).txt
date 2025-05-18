@@ -1,0 +1,59 @@
+In Django, you send data from a view to a template using the **context dictionary**. Here's a simple step-by-step guide:
+
+### **1. Create a View in `views.py`**
+
+You pass data to the template by including it in a dictionary (commonly named `context`), then use `render()` to send it along with the request.
+
+```python
+from django.shortcuts import render
+
+def my_view(request):
+    data = {
+        'name': 'Alice',
+        'age': 30,
+        'items': ['Apples', 'Bananas', 'Cherries']
+    }
+    return render(request, 'my_template.html', context=data)
+```
+
+### **2. Create a Template (e.g., `my_template.html`)**
+
+Use Django template syntax to access the data passed from the view.
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Template</title>
+</head>
+<body>
+    <h1>Hello, {{ name }}!</h1>
+    <p>Age: {{ age }}</p>
+    <ul>
+        {% for item in items %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+```
+
+### **3. Map the View in `urls.py`**
+
+```python
+from django.urls import path
+from .views import my_view
+
+urlpatterns = [
+    path('', my_view, name='home'),
+]
+```
+
+### Summary:
+
+* **`context`** is a dictionary where keys are the variable names you'll use in the template.
+* Use `render(request, template_name, context)` to connect your view to a template with data.
+
+If you're using **class-based views**, you pass context by overriding the `get_context_data` method.
+
+Let me know if you want an example with a model or class-based view.
