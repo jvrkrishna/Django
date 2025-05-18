@@ -37,23 +37,9 @@ Python
 Create HTML template files:
     --Inside the templates directory (or your app's templates directory), create your HTML files (e.g., home.html, about.html). These files will contain the structure and content of your web pages.
 
-Write HTML and Django template syntax:
-    --In your HTML files, you can use standard HTML along with Django's template language syntax. This allows you to insert dynamic content, use control structures (like loops and conditionals), and access variables passed from your views.
-    --Variables: Use double curly braces {{ variable_name }} to display values from the context.
-    --Tags: Use {% tag_name %} for logic and control flow, such as loops (for) and conditional statements (if).
-    --Filters: Use filters to modify variable output, for example {{ variable_name|filter_name }}.
-
 Load and render templates in views:
-    --In your Django views, use the render() function to load and render your templates. Pass a context dictionary to the render() function containing the data you want to display in the template.
-Python
-
-    from django.shortcuts import render
+    --In your Django views, use the render() function to load and render your templates.
+from django.shortcuts import render
     
-    def my_view(request):
-        context = {
-            'variable1': 'Hello',
-            'variable2': 'World',
-        }
-        return render(request, 'my_template.html', context)
-        
-Use template inheritance (optional): Create a base template with common elements (e.g., header, footer). Use the {% extends %} tag in other templates to inherit from the base template and the {% block %} tag to define replaceable content sections.
+def my_view(request):
+    return render(request, 'my_template.html')
