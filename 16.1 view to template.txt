@@ -33,7 +33,16 @@ from django.shortcuts import render,HttpResponse
 def sample_view(request):
     return HttpResponse("<h1>This is Sample view page.</h1>")
 
-Step 6: Define Project level urls
+Step 6: Define Application level urls
+VtoTProject/App1/urls.py
+------------------------------
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('sample/', views.sample),
+]
+
+Step 7: Define Project level urls
 VtoTProject/VtoTProject/urls.py
 --------------------------------------------
 from django.contrib import admin
@@ -44,15 +53,6 @@ urlpatterns = [
     path('App1/',include('App1.urls')),
 ]
 
-
-Step 7: Define Application level urls
-VtoTProject/App1/urls.py
-------------------------------
-from django.urls import path
-from . import views
-urlpatterns = [
-    path('sample/', views.sample),
-]
 
 Steps to Create Template:
 ----------------------------------
@@ -115,7 +115,13 @@ from django.shortcuts import render
 
 # Create your views here.
 def sample_view(request):
-    return render(request, 'App1/sample.html')
+    data = {
+        'name': 'Alice',
+        'age': 30,
+        'items': ['Apples', 'Bananas', 'Cherries']
+    }
+    return render(request, 'App1/sample.html', context=data)
+
 
     --execute the project
 ----------------------------------------------------
