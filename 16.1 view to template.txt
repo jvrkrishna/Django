@@ -64,14 +64,14 @@ Steps to Create Template:
     --Setup the templates folder
 ----------------------------------
 Step 8: Create Project level templates folder and inside that create AppName folder
-    0007/VtoTProject>mkdir templates
-    0007/VtoTProject>cd templates
-    0007/VtoTProject>mkdir App1
+    0008/VtoTProject>mkdir templates
+    0008/VtoTProject>cd templates
+    0008/VtoTProject>mkdir App1
 
     --Setup DIRS in settings.py
 -----------------------------------
 Step 9:  Navigate to project level Settings and check the DIRS option within the TEMPLATES setting to make sure it includes the path to your templates directory.
-    Go to ---> 0007-->VtoTProject-->settings.py
+    Go to ---> 0008-->VtoTProject-->settings.py
     --import os (Add this command in top of the content in setting.py)
 
     TEMPLATES = [
@@ -91,7 +91,7 @@ Step 9:  Navigate to project level Settings and check the DIRS option within the
 
     --Create a template
 --------------------------------------
-Step 10: Now navigate to 0007-->VtoTProject-->templates-->App1
+Step 10: Now navigate to 0008-->VtoTProject-->templates-->App1
     --Create template files and add html code
     add-admission.html
     admission-report.html
@@ -102,7 +102,7 @@ add-admission.html
     <body bgcolor="red">
         This is add-admission Page
     </body>
-    </html>
+</html>
 
 admission-report.html
 <html>
