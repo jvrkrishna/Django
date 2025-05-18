@@ -33,16 +33,29 @@ from django.shortcuts import render,HttpResponse
 def sample_view(request):
     return HttpResponse("<h1>This is Sample view page.</h1>")
 
+Step 5.1:Update in Project level urls.py
+
+from django.urls import path
+from App1 import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('sample/',views.sample_view),
+]
+
+Now check ---->python manage.py runserver
+             ->http://127.0.0.1:8000/sample
+
 Step 6: Define Application level urls
 VtoTProject/App1/urls.py
 ------------------------------
 from django.urls import path
 from . import views
 urlpatterns = [
-    path('sample/', views.sample),
+    path('sample/', views.sample_view),
 ]
 
-Step 7: Define Project level urls
+Step 7: Modify in  Project level urls
 VtoTProject/VtoTProject/urls.py
 --------------------------------------------
 from django.contrib import admin
@@ -53,6 +66,8 @@ urlpatterns = [
     path('App1/',include('App1.urls')),
 ]
 
+Now check ---->python manage.py runserver
+             ->http://127.0.0.1:8000/App1/sample
 
 Steps to Create Template:
 ----------------------------------
@@ -90,8 +105,7 @@ Step 10: Now navigate to 0008-->VtoTProject-->templates-->App1
     --Create template files and add html code
     sample.html
 
-sample.html
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>My Template</title>
@@ -116,19 +130,11 @@ from django.shortcuts import render
 # Create your views here.
 def sample_view(request):
     data = {
-        'name': 'Alice',
+        'name': 'Ram',
         'age': 30,
         'items': ['Apples', 'Bananas', 'Cherries']
     }
     return render(request, 'App1/sample.html', context=data)
 
-
-    --execute the project
-----------------------------------------------------
-Step 8: Start developement server and send HTTP Request 
-	py manage.py runserver 
-	
-	send HTTP Request 
-	http://127.0.0.1:8000/App1/addA
-	http://127.0.0.1:8000/App1/admissionR
-
+Now check ---->python manage.py runserver
+             ->http://127.0.0.1:8000/App1/sample
