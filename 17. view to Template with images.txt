@@ -1,0 +1,13 @@
+1.	Create static folder in project level
+2.	Add Images to that folder
+3.	Set the STATICFILES_DIRS in settings.py
+STATICFILES_DIRS=[os.path.join(BASE_DIR, 'static')]   
+4.	In template the load the static files ---- use template tag—{% %}
+Example:
+{% load static %}
+<html>
+<head> <title>This is static template</title></head>
+<body>
+<img src="{% static "if any folder_name/filename.extention" %}" alt="Image not Found"/>
+</body>
+</html>
