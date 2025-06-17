@@ -1,7 +1,7 @@
 Project No: 0009
 Project Name: Sample_Project
 Template Language read the theory and goto practical in line no 90
-**********************************************
+***********************************************************************************
 NOW we are going to learn Template Language
 
 1. Template Inheritance in Django

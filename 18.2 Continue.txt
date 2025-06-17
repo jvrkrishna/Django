@@ -1,0 +1,80 @@
+Project No: 0009
+Project Name: Sample_Project
+Create a super users
+***********************************************************************************
+
+PS C:\Users\jvrkr\git_repo\Django_projects\0009\Sample_Project> python manage.py runserver
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+June 17, 2025 - 23:49:22
+Django version 5.2, using settings 'Sample_Project.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.      
+For more information on production servers see: https://docs.djangoproject.com/en/5.2/howto/deployment/
+
+#Obeserve the above line no 12 we have observed 18 unapplied migrations first we have to migrate those.
+
+***********************************************************************************
+PS C:\Users\jvrkr\git_repo\Django_projects\0009\Sample_Project> py manage.py makemigrations
+No changes detected
+
+***********************************************************************************
+This command will apply all migrations to the database and create the necessary tables, including those for Django's authentication system.
+
+PS C:\Users\jvrkr\git_repo\Django_projects\0009\Sample_Project> py manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying sessions.0001_initial... OK
+
+***********************************************************************************
+PS C:\Users\jvrkr\git_repo\Django_projects\0009\Sample_Project> python manage.py createsuperuser
+Username (leave blank to use 'jvrkr'): rk
+Email address: rk@gmail.com
+Password: 1234
+Password (again): 1234
+This password is too short. It must contain at least 8 characters.
+This password is too common.
+This password is entirely numeric.
+Bypass password validation and create user anyway? [y/N]: y
+Superuser created successfully.
+
+***********************************************************************************
+Login to Admin Panel
+Run the Server
+Now, run the development server to check everything is working:
+
+python manage.py runserver
+
+Log in to the Admin Panel
+Now, open your browser and navigate to the Django admin panel:
+
+http://127.0.0.1:8000/admin/
+
+Use the superuser credentials (the username and password you set earlier) to log in.
+
+That's it! You now have a superuser account, and you can access the Django admin panel to manage your models, users, and other administrative tasks.
