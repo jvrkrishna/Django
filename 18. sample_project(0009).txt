@@ -1,6 +1,6 @@
 Project No: 0009
 Project Name: Sample_Project
-Step by Step Process
+Step by Step Process Settings file and directories
 **********************************************
 In this  I will teach you how to change the necessary settings in the Django settings file. There are 6 things you must change when you start a Django project and when you deploy the project you must change some more settings.
 here I discussed the necessary settings for development and also deployment of the Django project. they are below

@@ -1,0 +1,218 @@
+Project No: 0009
+Project Name: Sample_Project
+Template Language read the theory and goto practical in line no 90
+**********************************************
+NOW we are going to learn Template Language
+
+1. Template Inheritance in Django
+
+In Django, template inheritance helps you reuse common parts like navbar, footer, and layout without rewriting them on every HTML page.
+
+✅ Parent Template (example.html)
+This is the base file that includes the layout and structure:
+
+<!-- example.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}My Site{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <!-- Navbar -->
+        <h1>My Website</h1>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <!-- Footer -->
+        <p>© 2025 My Website</p>
+    </footer>
+</body>
+</html>
+
+✅ Child Template (display.html)
+
+This file inherits from example.html and only needs to fill in specific blocks:
+
+<!-- display.html -->
+{% extends 'example.html' %}
+
+{% block title %}Display Page{% endblock %}
+
+{% block content %}
+    <h2>Welcome to the Display Page</h2>
+    <p>This content is specific to the display page.</p>
+{% endblock %}
+
+
+---
+
+✅ 2. Static Files in Django
+
+Static files include CSS, JavaScript, images, etc. To use them:
+
+Step 1: In the template, load static at the top
+
+{% load static %}
+
+> ⚠️ Make sure you use {% %} not (% %).
+Correct syntax: {% load static %}
+
+
+
+Step 2: Use static paths like this:
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script src="{% static 'js/script.js' %}"></script>
+<img src="{% static 'images/logo.png' %}" alt="Logo">
+
+
+---
+
+✅ Summary:
+
+Use {% extends 'base.html' %} for inheritance.
+
+Use {% block content %} and {% endblock %} to insert custom content.
+
+Use {% load static %} to access static files.
+
+Reference files using {% static 'path/to/file' %}.
+
+****************** Practical **********************
+*************Variables printing*********************
+1. Go to Project level views.py
+Example Practice:
+
+def home(request):
+    name='Rama Krishna'  #Add a variable
+    return render(request,'index.html',{'name':name}) 
+    
+    #In Django we can call variable as dictionary format
+
+2. Now define the declared variable in required html pages like index.html add the variables in block content
+
+{% block content %}
+<h2>This is Home Page</h2>
+<h3>My name is {{name}}</h3> #Variables are called in {{}} in Django
+{% endblock content %}
+
+
+*************** list of values printing with for loop****************
+3. Now create a lists in Project level views.py
+
+def home(request):
+    name='Rama Krishna'
+    friends=["Ram","Hari","Chanti"]
+    return render(request,'index.html',{'name':name,'friends':friends})
+
+4. Now define the declared variable in required html pages like index.html add the variables in block content
+
+{% block content %}
+<h2>This is Home Page</h2>
+<h3>My name is {{name}}</h3>
+
+{% for i in friends  %}#Add these lines to print the list with the help of for loop
+  {{i}}
+{% endfor %}
+
+{% endblock content %}
+
+*********** list of values printing with for loop adding counter no****************
+
+{% block content %}
+<h2>This is Home Page</h2>
+<h3>My name is {{name}}</h3>
+
+{% for i in friends  %}
+  <b>{{forloop.counter}}.{{i}}</b><br> #Modify this line for counter
+{% endfor %}
+
+{% endblock content %}
+
+********** Modify the titles page to page *****************
+Here up to now we are seeing that every page has same title now we are changing that. Every page has its own title with related tab name.
+Example:
+    For Home tab --------- Home
+        about tab -------- about
+        Contact tab ------ Contact
+
+Now modify every html page(index.html,contact.html,about.html) head portion title tag
+#index.html ------ head portion modification
+{% block title %}
+    <title>Home page</title>
+{% endblock title %}
+
+#Example in contact html:
+{% extends 'index.html' %}
+
+{% block title %}   #Add below three lines
+    <title>Contact page</title>
+{% endblock title %}
+
+{% block content %}
+<h2>This is Contact Page</h2>
+{% endblock content %}
+
+******************************* If condition **************************************
+In Django templates, you can use {% if %} statements to implement conditional logic. This allows you to check if certain conditions are true and then render different parts of the template accordingly.
+
+Here's the basic syntax for using if conditions in Django templates:
+
+Basic Syntax:
+{% if condition %}
+    <!-- This block will be rendered if condition is true -->
+{% else %}
+    <!-- This block will be rendered if condition is false -->
+{% endif %}
+
+Example 1: Checking if a variable exists or is not empty
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}!</p>
+{% else %}
+    <p>You need to log in first.</p>
+{% endif %}
+
+In this example:
+If the user.is_authenticated is True, it shows a personalized message with the username.Otherwise, it asks the user to log in.
+
+Example 2: Checking if a number is greater than a certain value
+{% if product.price > 100 %}
+    <p>This product is expensive.</p>
+{% else %}
+    <p>This product is affordable.</p>
+{% endif %}
+Here, the template checks if the product’s price is greater than 100 and renders a message based on that condition.
+
+Example 3: Checking for the existence of a list or object
+{% if items %}
+    <ul>
+    {% for item in items %}
+        <li>{{ item.name }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No items available.</p>
+{% endif %}
+
+In this case:
+The template checks if the items list exists and contains any objects.
+If it does, it loops through the list and displays each item.
+If not, it shows the message "No items available."
+
+Example 4: Using elif (Else If)
+{% if user.age >= 18 %}
+    <p>You are an adult.</p>
+{% elif user.age >= 13 %}
+    <p>You are a teenager.</p>
+{% else %}
+    <p>You are a child.</p>
+{% endif %}
+You can chain multiple conditions using {% elif %} to handle more than two possibilities.
+
