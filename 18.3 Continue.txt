@@ -1,0 +1,150 @@
+Project No: 0009
+Project Name: Sample_Project
+Create model
+***********************************************************************************
+In Django, models are Python classes that represent the structure of your database. They define the fields and behaviors of the data you want to store. Each model is essentially a blueprint for a table in your database. Django provides an abstraction layer that allows you to interact with the database using Python code instead of SQL queries.
+
+Key Concepts:
+Fields: Each attribute of the model represents a field in the database table.
+
+Database Table: Django automatically creates a database table based on your model.
+
+ORM (Object-Relational Mapping): Django provides an ORM that automatically converts model instances into SQL queries, so you don't have to write SQL manually.
+
+How to Create Models in Django
+To create a model in Django, you need to:
+
+Define the model class: The class should inherit from django.db.models.Model.
+
+Specify model fields: You define fields by adding attributes to the class, with each attribute corresponding to a field in the database.
+
+Step-by-Step Guide to Creating a Model
+1. Define a Model
+Inside one of your Django app directories, typically in models.py, you define your model as a Python class.
+
+***************************************************************
+Pratical 
+1. Create Models
+Model.py
+***************************************************************
+# Create your models here
+from django.db import models
+from datetime import datetime
+
+class Post(models.Model):
+    title = models.CharField(max_length=120)
+    description = models.TextField()
+    author = models.CharField(max_length=50)
+    created_at = models.DateField(default=datetime.now)
+    is_published = models.BooleanField(default=False)
+
+    # Optional: String representation of the object
+    def __str__(self):
+        return self.title  # Or you can return self.author or something else
+
+# models.py
+
+from django.db import models
+
+class Sample(models.Model):
+    # Fields of the model
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # Optional: String representation of the object
+    def __str__(self):
+        return self.title
+
+***************************************************************
+EXPLANATION OF ABOVE Posts
+***************************************************************
+#SAMPLE Model EXPLANATION
+title: A string field for the title, with a max length of 100 characters.
+
+content: A TextField for the body of the post (no character limit).
+
+created_at: Automatically set when a post is created.
+
+updated_at: Automatically updated whenever the post is modified.
+
+__str__(): The string representation of the model is set to return the title, which is useful when working with Django's admin panel or debugging.
+
+#Post Model EXPLANATION
+CharField: A field for short text, like a string. You specify max_length to set the maximum length of the field.
+
+TextField: A field for longer text, no need for max_length.
+
+DateTimeField: A field for storing date and time. auto_now_add automatically sets the time when the object is first created, and auto_now updates the timestamp whenever the object is saved.
+
+Common Field Types in Django Models:
+CharField: For small text fields.
+
+TextField: For large text fields.
+
+IntegerField: For integer numbers.
+
+DecimalField: For fixed-precision decimal numbers.
+
+FloatField: For floating-point numbers.
+
+DateField: For storing dates.
+
+DateTimeField: For storing dates and times.
+
+BooleanField: For storing boolean values (True/False).
+
+ForeignKey: For establishing a one-to-many relationship (e.g., a Post might have one Author).
+
+***************************************************************
+Practical
+***************************************************************
+2. Run Migrations
+Once you've defined the model, you need to create and apply database migrations to actually create the table in your database.
+
+Step 1: Create Migration
+>python manage.py makemigrations
+This will generate migration files based on the changes you made in the models.
+
+Step 2: Apply Migration
+>python manage.py migrate
+This applies the migration and creates the database tables.
+
+3. Register in Admin Interface
+You can also make your model available in the Django admin interface by registering it in admin.py:
+
+from django.contrib import admin
+from .models import Post,Sample
+# Register your models here.
+
+admin.site.register(Post)
+admin.site.register(Sample)
+
+>python Manage.py runserver
+
+#Now check whether created models are showing in the admin interface or not by checking url http://127.0.0.1:8000/admin in chrome.
+
+#Now add a post and see the posts and we can modify the posts.
+
+#While seeing all the posts it shows only title. If we want to add some more fileds into that visual we can modify in Admin.py
+
+class PostAdmin(admin.ModelAdmin): #Add this class
+    list_display=('id','title','created_at')
+
+admin.site.register(Post,PostAdmin) #Add class to register
+admin.site.register(Sample,PostAdmin)
+
+#To get as links to read or edit the posts modify admin.py
+class PostAdmin(admin.ModelAdmin):
+    list_display=('id','title','created_at')
+    list_display_links=('title',) #Add this to get as link
+
+admin.site.register(Post,PostAdmin)
+admin.site.register(Sample,PostAdmin)
+
+#To get filters modify admin.py
+class PostAdmin(admin.ModelAdmin):
+    list_display=('id','title','created_at')
+    list_display_links=('title',)
+    list_filter=('created_at','is_published',) #Add to get filters
