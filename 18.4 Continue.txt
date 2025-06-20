@@ -1,0 +1,81 @@
+Project No: 0009
+Project Name: Sample_Project
+Models to view and view to Template
+***************************************************************
+#Step By Step of creation of Models:
+Step 1: Set Up Django Project
+Before diving into models and templates, you need a basic Django project. If you don’t have one, create a new Django project and app.
+
+>django-admin startproject myproject
+>cd myproject
+>python manage.py startapp myapp
+
+Step 2: Define Your Model
+In Django, models represent your database structure. In your app's models.py, you define classes that correspond to tables in your database.
+
+For example, let’s define a simple model for a blog post.
+# myapp/models.py
+from django.db import models
+
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+This model represents a blog post with a title, content, and creation date. After defining your model, run migrations to create the corresponding database table.
+
+>python manage.py makemigrations
+>python manage.py migrate
+
+Step 3: Register Your Model with the Admin Panel (Optional)
+To interact with the model through Django's admin interface, you can register the model in the admin.py file of your app.
+
+# myapp/admin.py
+from django.contrib import admin
+from .models import Post
+
+admin.site.register(Post)
+
+Now, run your development server and go to http://127.0.0.1:8000/admin to view and manage your Post model if you've set up Django Admin.
+
+>python manage.py runserver
+
+***************************************************************
+Step 4: Create a View to Fetch Data (Model to View)
+A view in Django receives HTTP requests and returns HTTP responses. In this case, we’ll create a view to display a list of App1 posts.
+
+Edit your views.py to include a view for displaying all posts.
+
+from django.shortcuts import render
+from .models import Post  #Add this line to import
+
+# Create your views here.
+def App1_view(request):
+    posts = Post.objects.all() #Add this line to get all elements in models.
+    return render(request,'App1/App1_home.html',{'posts':posts}) # Modify this line to render the models.
+
+This view fetches all Post objects from the database and passes them to the template App1_home.html.
+
+Step 5: Create the Template(View to Template)
+Now, let's create the template (App1_home.html) that will render the posts. Django templates are stored in the templates directory of the app (or the project if you want to share templates).
+
+Go to templates folder in project level and inside that in App1 folder go to App1_home.html(Modify the block content).
+
+{% block content %}
+{% for i in posts %}
+     <h3>{{i.title}}</h3>
+     <i>{{i.created_at}}</i>
+     <b>{{i.author}}</b>
+     <p>{{i.description}}</p>
+{% empty %}
+            <p>No posts available.</p>
+{% endfor %}
+{% endblock content %}
+
+#Here the above show all the posts. For example if we want to post only RK author posts then we go for filters in views.py
+
+def App1_view(request):
+    posts = Post.objects.all().filter(author="RK") #Modify this
+    return render(request,'App1/App1_home.html',{'posts':posts}) 

@@ -27,29 +27,26 @@ Pratical
 1. Create Models
 Model.py
 ***************************************************************
-# Create your models here
 from django.db import models
 from datetime import datetime
-
+# Create your models here.
 class Post(models.Model):
-    title = models.CharField(max_length=120)
-    description = models.TextField()
-    author = models.CharField(max_length=50)
-    created_at = models.DateField(default=datetime.now)
-    is_published = models.BooleanField(default=False)
-
-    # Optional: String representation of the object
+    title=models.CharField(max_length=150)
+    description=models.TextField()
+    author=models.CharField(max_length=50)
+    created_at=models.DateTimeField(default=datetime.now)
+    is_published=models.BooleanField(default=False)
+    
     def __str__(self):
-        return self.title  # Or you can return self.author or something else
-
-# models.py
-
+        return self.title
+    
 from django.db import models
 
 class Sample(models.Model):
     # Fields of the model
     title = models.CharField(max_length=100)
-    content = models.TextField()
+    description = models.TextField()
+    author=models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -147,4 +144,4 @@ admin.site.register(Sample,PostAdmin)
 class PostAdmin(admin.ModelAdmin):
     list_display=('id','title','created_at')
     list_display_links=('title',)
-    list_filter=('created_at','is_published',) #Add to get filters
+    list_filter=('created_at','author',) #Add to get filters
