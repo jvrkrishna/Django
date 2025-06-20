@@ -43,10 +43,12 @@ Now, run your development server and go to http://127.0.0.1:8000/admin to view a
 >python manage.py runserver
 
 ***************************************************************
+Practical
+***************************************************************
 Step 4: Create a View to Fetch Data (Model to View)
 A view in Django receives HTTP requests and returns HTTP responses. In this case, we’ll create a view to display a list of App1 posts.
 
-Edit your views.py to include a view for displaying all posts.
+Edit your App1 views.py to include a view for displaying all posts.
 
 from django.shortcuts import render
 from .models import Post  #Add this line to import
