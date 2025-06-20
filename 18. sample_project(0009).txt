@@ -50,17 +50,17 @@ if settings.DEBUG==False:
 4. Configure the Database
 In our Django project, SQLite is the default database. If we want, we can configure the other databases also. let's change your database by using this code. Here I configure the MySQL database.
 
-DATABASES - {
-'default': {
-'ENGINE: 'django.db.backends.mysql',
-'NAME': 'DB_NAME', # Database name
-'USER':'DB_USER',
-'PASSWORD':'DB_PASSWORD',
-'HOST': 'localhost',
-#Or an IP Address that your DB is hosted on
-'PORT':'3306',
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'your_db_name',
+        'USER': 'your_mysql_user',
+        'PASSWORD': 'your_mysql_password',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
 }
-}
+
 
 In the same way, we can configure the other databases also.
 
