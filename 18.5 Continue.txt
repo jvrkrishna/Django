@@ -43,6 +43,8 @@ For verification check in media folder inside images folder there is an image wh
 #Add this below line in for loop
 <img src='{{i.img.url}}'> #Mention .url for path reference
 
+Note: If image is not appearing then check #in urls.py if settings.DEBUG:  #Here remove ==False
+
 #If we need to mention width and hieght:
 <img src="{{ i.img.url }}" alt="{{ i.title }}" width="300" height="200">
 
