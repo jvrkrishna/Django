@@ -1,0 +1,114 @@
+Project No: 0011
+Project Name: Project --- blog
+Create users and authenticate users
+***************************************************************
+>C:\Users\jvrkr\git_repo\Django_projects\0010>django-admin startproject Project
+
+#Modify settings.py accordingly
+#Modify settings.py
+1. add app name in installed apps
+
+2. Modify template dirs path ---'DIRS': [os.path.join(BASE_DIR,'templates')],
+
+3. create templates folder
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>mkdir templates
+
+4. makemirations, migrate, createsuperuser
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py makemigrations
+
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py migrate
+
+C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py createsuperuser
+
+C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py runserver
+
+Go to link http://127.0.0.1:8000/admin/ and check user fields in admin
+
+create index.html and register.html
+index.html
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        <h3>THIS IS HOME PAGE</h3>
+    </body>
+</html>
+
+register.html
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        <h1>Registration PAGE</h1>
+
+<form action="" method="POST">{% csrf_token %}
+
+<input type="text" name="username" id="username" placeholder="Enter Username" required><br>
+
+<input type="email" name="email" id="email" placeholder="Enter Email" required><br>
+
+<input type="password" name="password" placeholder="Enter Password" required><br>
+
+<button type="submit">Register</button>
+
+</form>
+    </body>
+</html>
+
+5. Modify project level urls.py
+from django.contrib import admin
+from django.urls import path,include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('blog.urls')),
+]
+
+6. Create app level urls.py and append the code
+from django.urls import path
+from .views import home,register
+
+urlpatterns=[
+    path('',home,name='home'),
+    path('register/',register,name='register'),
+]
+
+7. Now create views.py in app level
+from django.shortcuts import render,redirect
+from django.contrib.auth.models import User #Here we are using existing model not creating model
+
+# Create your views here.
+def home(request):
+    return render(request,'index.html')
+
+def register(request):
+    return render(request,'register.html')
+
+
+>C:\Users\jvrkr\git_repo\Django_projects\0011\Project>py manage.py runserver
+
+8. To get data modify views.py
+from django.shortcuts import render,redirect
+from django.contrib.auth.models import User #Here we are using existing model not creating model
+
+# Create your views here.
+def home(request):
+    return render(request,'index.html')
+
+def register(request):
+    if request.method=='POST':
+        username=request.POST['username']
+        email=request.POST['email']
+        password=request.POST['password']
+        
+        user=User.objects.create_user(username=username,email=email,password=password)
+        user.save()
+        return redirect('home') #to redirect to home page after register.
+    return render(request,'register.html')
+
+>C:\Users\jvrkr\git_repo\Django_projects\0011\Project>py manage.py runserver
+
+register the user in http://127.0.0.1:8000/register/ and register then check the admin page whether the user data is saved or not.
+

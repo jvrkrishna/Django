@@ -1,5 +1,6 @@
-Project No: 0009
-Project Name: contact_us
+Project No: 0010
+Project Name: Project --- contact_us
+Create contact us page and save the data
 ***************************************************************
 >C:\Users\jvrkr\git_repo\Django_projects\0010>django-admin startproject Project
 
