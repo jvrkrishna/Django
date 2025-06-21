@@ -1,0 +1,130 @@
+Project No: 0009
+Project Name: contact_us
+***************************************************************
+>C:\Users\jvrkr\git_repo\Django_projects\0010>django-admin startproject Project
+
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>Django-admin startapp contact_us
+
+#Modify settings.py
+1. add app name in installed apps
+
+2. Modify template dirs path ---'DIRS': [os.path.join(BASE_DIR,'templates')],
+
+3. create templates folder
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>mkdir templates
+
+4. create a file index.html and contact_us.html in templates folder.
+
+5. Modify project level urls.py
+from django.contrib import admin
+from django.urls import path,include
+
+from contact_us.views import home
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('',home,name='home'),
+    path('contact_us/', include('contact_us.urls')),
+]
+
+
+6. Create app level urls.py and append the code
+from django.urls import path
+from .views import contactus
+
+urlpatterns=[
+    path('',contactus,name='contact'),
+]
+
+7. Now create views.py in app level
+# Create your views here.
+
+def home(request):
+    return render(request,'index.html')
+
+def contactus(request):
+    return render(request,'contact_us.html')
+
+8. Create index.html page
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        <h3>Hello</h3>
+    </body>
+</html>
+
+9. makemirations, migrate, createsuperuser
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py makemigrations
+
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py migrate
+
+C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py createsuperuser
+
+10. Now download or copy any contact us form from bootstrap code in contact_us.html.
+
+11. Now run this link http://127.0.0.1:8000/contact_us/
+
+12. Modify contact_us.html as per requirement and modify each element attrinbute name="name" like this all. 
+Example:
+<input type="text" class="form-control" id="nam" name="name" placeholder="Enter name" required>
+
+13. Create models goto models.py and create models (Install this extention for auto code ---Djaneiro - Django Snippets)
+
+from django.db import models
+from datetime import datetime
+
+# Create your models here.
+class Contact(models.Model):
+    name=models.CharField(max_length=100)
+    email=models.EmailField(max_length=200)
+    message=models.TextField()
+    is_resolved=models.BooleanField(default=False)
+    created_at=models.DateTimeField(default=datetime.now)
+
+    class Meta:
+        verbose_name = 'Contact'
+        verbose_name_plural = 'Contacts'
+
+    def __str__(self):
+        return self.email
+
+14. Register in admin.py
+from django.contrib import admin
+from .models import Contact
+# Register your models here.
+
+admin.site.register(Contact)
+
+15. makemirations, migrate, runserver
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py makemigrations
+
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py migrate
+
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py runserver
+
+Go and verify model is created or not http://127.0.0.1:8000/admin/
+
+16. Now modify views (views to template)
+from django.shortcuts import render
+from .models import Contact
+# Create your views here.
+
+def home(request):
+    return render(request,'index.html')
+
+def contactus(request):
+    if request.method=='POST':
+        name=request.POST['name']
+        email=request.POST['email']
+        message=request.POST['msg']
+        print(name,email,message)
+        data=Contact(name=name,email=email,message=message)
+        data.save()
+    return render(request,'contact_us.html')
+
+17. Modify contact_us.html form action and add csrf token.
+<form action="" method="POST">{% csrf_token %}
+
+>py manage.py runserver
