@@ -112,3 +112,71 @@ def register(request):
 
 register the user in http://127.0.0.1:8000/register/ and register then check the admin page whether the user data is saved or not.
 
+***************************************************************
+User authentication , login and logout
+***************************************************************
+1. Create login.html in templates folder
+<html>
+    <head>
+        <title>Login</title>
+    </head>
+    <body>
+        <h1>Login Login</h1>
+
+<form action="" method="POST">{% csrf_token %}
+<input type="text" name="username" placeholder="Enter Username">
+<input type="password" name="pwd" placeholder="Enter password">
+<button type='submit'>LOGIN</button>
+</form>
+    </body>
+</html>
+
+2. Add this in views.py
+from django.contrib.auth import login,authenticate,logout
+def login_user(request):
+    if request.method=='POST':
+        username=request.POST['username']
+        password=request.POST['pwd']
+        
+        user=authenticate(username=username, password=password)
+        
+        if user is not None:
+            login(request,user)
+            return redirect('home')
+        else:
+            return render(request,'login.html')
+    return render(request,'login.html')
+
+def logout_user(request):
+    logout(request)
+    
+    return redirect('home')
+
+3. To know which user is logged in use {{request.user}} in home page.
+
+3. Modify app level urls.py
+from django.urls import path
+from .views import home,register,login_user,logout_user
+
+urlpatterns=[
+    path('',home,name='home'),
+    path('register/',register,name='register'),
+    path('login/',login_user,name='login'),
+    path('logout/',logout_user,name='logout'),
+]
+
+4. Create menu bar in Home page
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        <h3>HOME PAGE</h3>
+        <button type="button"><a href="{% url 'home' %}">HOME</a></button>
+        <button type="button"><a href="{% url 'register' %}">Register</a></button>
+        <button type="button"><a href="{% url 'login' %}">LOGIN</a></button>
+        <button type="button"><a href="{% url 'logout' %}">LOGOUT</a></button>
+
+       <h1><p align="right">{{request.user}}</p></h1>
+    </body>
+</html>
