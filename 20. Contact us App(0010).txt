@@ -16,7 +16,26 @@ Create contact us page and save the data
 
 4. create a file index.html and contact_us.html in templates folder.
 
-5. Modify project level urls.py
+5. Create index.html page
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        <h3>Hello</h3>
+    </body>
+</html>
+
+6. Now create views.py in app level
+# Create your views here.
+
+def home(request):
+    return render(request,'index.html')
+
+def contactus(request):
+    return render(request,'contact_us.html')
+
+7. Modify project level urls.py
 from django.contrib import admin
 from django.urls import path,include
 
@@ -29,32 +48,13 @@ urlpatterns = [
 ]
 
 
-6. Create app level urls.py and append the code
+8. Create app level urls.py and append the code
 from django.urls import path
 from .views import contactus
 
 urlpatterns=[
     path('',contactus,name='contact'),
 ]
-
-7. Now create views.py in app level
-# Create your views here.
-
-def home(request):
-    return render(request,'index.html')
-
-def contactus(request):
-    return render(request,'contact_us.html')
-
-8. Create index.html page
-<html>
-    <head>
-        <title>Home</title>
-    </head>
-    <body>
-        <h3>Hello</h3>
-    </body>
-</html>
 
 9. makemirations, migrate, createsuperuser
 >C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py makemigrations
@@ -107,7 +107,7 @@ admin.site.register(Contact)
 
 Go and verify model is created or not http://127.0.0.1:8000/admin/
 
-16. Now modify views (views to template)
+16. Now modify views (Model to views)
 from django.shortcuts import render
 from .models import Contact
 # Create your views here.
