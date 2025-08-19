@@ -32,7 +32,7 @@ Server → gives answers (responses)
         🌐 Web servers
         ⚙️ Application servers
         🗄️ Database servers
-        ⏳ Designed to run 24/7, ensuring availability.
-        ⚖️ Uses load balancing in large systems to distribute requests.
-        📈 Scalability: add more servers or upgrade hardware to handle more traffic.
-        🔒 Stores sensitive data securely.
+            ⏳ Designed to run 24/7, ensuring availability.
+            ⚖️ Uses load balancing in large systems to distribute requests.
+            📈 Scalability: add more servers or upgrade hardware to handle more traffic.
+            🔒 Stores sensitive data securely.

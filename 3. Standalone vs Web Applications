@@ -7,10 +7,10 @@
 
 2. Types of Applications
     1️⃣ Standalone Applications
-    💻 Installable software that runs independently without internet.
-    📦 All essential components are bundled together → no external dependency.
-    ⚙️ Uses local machine hardware & resources.
-    🔄 Updates must be installed manually.
+        💻 Installable software that runs independently without internet.
+        📦 All essential components are bundled together → no external dependency.
+        ⚙️ Uses local machine hardware & resources.
+        🔄 Updates must be installed manually.
     
     📝 Examples: Offline text editors, music players, calculators, simple games.
 
