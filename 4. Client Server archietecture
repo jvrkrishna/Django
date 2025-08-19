@@ -1,27 +1,38 @@
-###############Client-Server Architecture#############
-Client-Server Architecture is a distributed application model.
-Client-Server Architecture splits tasks between clients and servers.
-Imagine it a conversation: clients ask questions, and servers answer.
+📘 Client–Server Architecture
+1. What is Client–Server Architecture?
+    🔹 A distributed application model.
+    🔹 Splits tasks between clients and servers.
+    🔹 Think of it as a conversation:
 
-Example: Imagine you are using a web browser to access a website. Your browser is the client. When you type in a URL and hit enter, your browser sends a request to the server where the website is hosted. The server processes this request, fetches the necessary data, and sends back a response, which your browser then displays as a web page.
+Client → asks questions (requests)
+Server → gives answers (responses)
 
-#Client:
-    --A client is a device or software application that send requests a server for resources or services.
-    --A Clients can be web browsers, smartphones, tablets, desktop applications, and other networked devices.
-    --The client provides the interface for users to interact with the system.
-    --The client runs on the user's local computer or device.
-    --Clients uses communication protocols such as HTTP, HTTPS, or WebSocket to interact with servers.
-    --The client retrieves data from the server and then displays it to users through its interface.
-    --While users interact with the application, the client maintains temporary session information.
+📖 Example:
+    When you use a web browser (client) to open a website:
+    Browser sends a request to the web server.
+    Server processes the request, fetches data, and sends back a response.
+    Browser then displays the web page to the user.
 
-#Server:
-    --A server is a dedicated computer that assists other devices, called clients, on a network.
-    --Servers receive requests from clients and fulfill those requests by processing data.
-    --A single server can efficiently manage requests from multiple clients simultaneously.
-    --After processing requests, servers send back generated responses to the respective clients.
-    --Servers include web servers, application servers, and database servers, each responding to specific client needs.
-    --Servers are designed to operate continuously (24/7), ensuring they are always available for clients.
-    --In large systems, servers use load balancing to evenly distribute requests across multiple servers, ensuring optimal performance.
-    --Servers can handle increased user requests by adding more servers or upgrading existing server hardware.
-    --Sensitive data can be stored securely on servers.
+2. Client
+    💻 A device or software application that sends requests to a server for resources/services.
+    📱 Can be: web browsers, smartphones, tablets, desktop apps, or networked devices.
+    🎨 Provides the interface for users to interact with the system.
+    🖥️ Runs on the user’s local device.
+    📡 Uses protocols like HTTP, HTTPS, WebSocket to communicate with servers.
+    📥 Retrieves data from the server and displays it to users.
+    🧩 Maintains temporary session information while users interact.
 
+3. Server
+    🖥️ A dedicated computer that serves multiple clients over a network.
+    📡 Receives requests from clients and processes them.
+    🤝 Can handle requests from multiple clients simultaneously.
+    📤 Sends back responses after processing.
+    
+    🏷️ Types of servers:
+        🌐 Web servers
+        ⚙️ Application servers
+        🗄️ Database servers
+        ⏳ Designed to run 24/7, ensuring availability.
+        ⚖️ Uses load balancing in large systems to distribute requests.
+        📈 Scalability: add more servers or upgrade hardware to handle more traffic.
+        🔒 Stores sensitive data securely.

@@ -1,43 +1,48 @@
-Web Server
-    --The primary role of a web server is to handle HTTP requests from users (clients).
-    --When a user accesses a website or a web application, their browser sends an HTTP request to the web server hosting that site.
-    --When a user sends a request to the web server, the server checks whether the request is for static content like HTML, CSS. JavaScript, or images, and if so, it directly sends these files to the client's browser without any server-side processing.
-    --When a web server receives a request that requires dynamic content or involves server-side processing, it forwards that request to an application server.
+📘 Web Server vs Application Server
+🌐 Web Server
+    📩 Primary role → Handle HTTP requests from clients (browsers). 
+    📥 Sends static content (HTML, CSS, JS, images) directly to client without extra processing.
+    🔀 If request requires dynamic content, forwards it to an Application Server.
 
-Application Server
-    --An application server receives the forwarded request from the web server.
-    --The application server is responsible for handling dynamic requests by executing server-side scripts, interacting with databases, and handles business logic.
-    --Once the application server processes the request forwarded by the web server and generates the dynamic content, it sends this content back to the web server. The web server then sends it directly to the client.
+✅ List of Popular Web Servers
+    Apache HTTP Server (Apache)
+    Nginx
+    LiteSpeed
+    Caddy
+    Microsoft IIS
+    CERN httpd
 
-List of web servers
-    --Apache HTTP Server(Apache)
-    --Nginx
-    --Litespeed
-    --Caddy
-    --Microsoft Internet Information Services(IIS)
-    --CERN httpd
+🎯 Roles of a Web Server
+    📥 Handle HTTP requests from browsers.
+    📂 Serve static content efficiently.
+    🔀 Forward dynamic requests to application servers (acts as reverse proxy).
+    📤 Send back responses after processing by application servers.
+    ⚖️ Load balancing → distribute traffic across servers.
+    🔒 SSL/TLS encryption for secure communication.
+    🛡️ Prevent security attacks (DDoS, SQL Injection, XSS, CSRF, Brute Force, Phishing, MitM).
+    ⚡ Caching → store frequently accessed content for speed.
+    📝 Logging → record requests for monitoring & audits.
 
-List of Application servers
-    --Gunicorn
-    --uWSGI
-    --Apache Tomcat
-    --GlassFish
-    --WildFly
+⚙️ Application Server
+    📥 Receives forwarded requests from the web server.
+    ⚡ Handles dynamic content generation (executing server-side scripts, business logic, database queries).
+    📤 Sends processed content back to the web server, which then delivers it to the client.
 
-Role of the Web server:
-    --Handling HTTP Requests: Web servers manage incoming HTTP requests from clients like web browsers
-    --Serving Static Content: They efficiently deliver static files (HTML, CSS, images) directly to clients.
-    --Forwarding Requests to App Servers: Act as reverse proxies, directing requests to backend application servers when it is dynamic.
-    --Receiving HTTP Responses: After processing by app servers, web servers receive and send dynamic content back to clients.
-    --Load Balancing: Distribute traffic across multiple application servers to optimize performance and prevent overloads.
-    --SSL/TLS Encryption: Manage encryption for secure communication between clients and servers.--Preventing Security Attacks: Web servers use techniques like rate limiting, input validation, and encryption to prevent DDoS attacks, SQL injection, XSS, CSRF, Brute Force Attacks, Phishing Attacks, MitM attacks and other security vulnerabilities, safeguarding web applications.
-    --Caching: Store frequently accessed content to enhance speed and reduce server load.
-    --Logging: Maintain records of requests for monitoring, troubleshooting, and security audit.
+✅ List of Popular Application Servers
+    Gunicorn
+    uWSGI
+    Apache Tomcat
+    GlassFish
+    WildFly
 
-Role of an Application Server:
-    --Generating Dynamic Content: This is the core strength of application servers, creating customized content based on user input or database interactions.
-    --Handling Concurrency. They efficiently manage multiple user requests at once, preventing delays and ensuring a smooth user experience for everyone.
-    --Interacting with Databases: Application servers act as a bridge between web servers and databases, fetching and storing data as needed by the application.
-    --Session Management: They track user sessions, remembering preferences and actions across different requests within the same session, personalizing the experience.
-    --Authentication: Application servers verify user identities to control access to sensitive application features and data.
-    --Middleware Integration: They work seamlessly with middleware tools like caching and logging to improve application performance and maintain detailed logs.
+🎯 Roles of an Application Server
+    ⚡ Generate dynamic content → customized responses based on user input/data.
+    👥 Handle concurrency → manage multiple requests at once smoothly.
+    🗄️ Database interactions → fetch & store data as required.
+    🔄 Session management → remember user actions & preferences.
+    🔑 Authentication → verify user identity for secure access.
+    🧩 Middleware integration → caching, logging, performance tuning.
+
+✅ In short:
+    🌐 Web Server → serves static files, forwards dynamic requests, manages traffic/security.
+    ⚙️ Application Server → processes dynamic requests, business logic, database operations.
