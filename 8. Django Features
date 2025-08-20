@@ -1,6 +1,6 @@
 Django Features:
     Built-in Functionality Features:
-        --MTV Architecture
+        --MVT Architecture
         --ORM (Object-Relational Mapping)--Admin Interface
         --URL Routing
         --Fully Loaded (Batteries-Included)
