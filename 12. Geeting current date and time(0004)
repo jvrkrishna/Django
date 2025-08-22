@@ -1,42 +1,39 @@
-Getting Current Date and Time in Django
-By using the datetime module, we will get the current date and time.
-import datetime
-dt=datetime.datetime.now()
-print (dt)-----2025-05-06 18:03:07.603018
-print (dt.year)----2025
-print(dt.month)----05
-print(dt.day)-----06
-print(dt.hour)----18
-print(dt.minute)---3
-print(dt.second)---7
-print(dt.microsecond)----603018
-
-
-dt-datetime.datetime.now()
-print (dt)-----2025-05-06 18:03:07.603018
-print(dt.strftime('a'))----Tues
-print(dt.strftime('%A'))---Tuesday
-print(dt.strftime('%W'))---06
-print(dt.strftime('%w'))---3
-print(dt.strftime('%m'))---07
-
-
 Project No: 0004
-Project Name: Getting current date and time in django
-******************************************************
-Step 1: Project Creation
-	django-admin startproject DateTimeProject 
+Project Name: Getting Current Date and Time in Django
+📌 Concept:
 
-Step 2: Enter into the project
-	cd DateTimeProject 
+In Django, we can use Python’s built-in datetime module to fetch the current date and time.
+Example:
+import datetime
+dt = datetime.datetime.now()
+print(dt)              # 2025-05-06 18:03:07.603018
+print(dt.year)         # 2025
+print(dt.month)        # 5
+print(dt.day)          # 6
+print(dt.hour)         # 18
+print(dt.minute)       # 3
+print(dt.second)       # 7
+print(dt.microsecond)  # 603018
 
-Step 3: Create the application 
-	py manage.py startapp DateTimeApp
+print(dt.strftime('%a'))  # Tue   (short day name)
+print(dt.strftime('%A'))  # Tuesday (full day name)
+print(dt.strftime('%W'))  # Week number
+print(dt.strftime('%w'))  # Day number of week (0=Sunday)
+print(dt.strftime('%m'))  # Month number
 
-Step 4: Install the application inside settings.py file 
+📌 Step 1: Project Creation
+django-admin startproject DateTimeProject
 
-DateTimeProject/DateTimeProject/settings.py 
----------------------------------------------
+📌 Step 2: Enter into the Project
+cd DateTimeProject
+
+📌 Step 3: Create the Application
+py manage.py startapp DateTimeApp
+
+📌 Step 4: Install the Application in Settings
+
+DateTimeProject/settings.py
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,70 +44,81 @@ INSTALLED_APPS = [
     'DateTimeApp',
 ]
 
-Step 5: Define the view function 
+📌 Step 5: Define the View Function
+DateTimeApp/views.py
 
-DateTimeProject/DateTimeApp/views.py
-------------------------------------
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import HttpResponse
 import datetime
-# Create your views here.
+
 def date_time_view(request):
-    dt=datetime.datetime.now()
-    data=f"""
+    # Get current date and time
+    dt = datetime.datetime.now()
+
+    # Format date and time
+    today_date = dt.strftime("%d/%m/%Y")   # e.g., 22/08/2025
+    current_time = dt.strftime("%H:%M:%S") # e.g., 10:57:34
+
+    # HTML response with simple clean design
+    data = f"""
     <html>
         <head>
-            <title>
-                Datetime Application
-            </title>
+            <title>Date and Time Application</title>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    background-color: #f8f9fa;
+                    color: #333;
+                    padding: 20px;
+                }}
+                .container {{
+                    max-width: 500px;
+                    margin: auto;
+                    background: #fff;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+                    text-align: center;
+                }}
+                h1 {{
+                    color: #0066cc;
+                    margin-bottom: 20px;
+                }}
+                p {{
+                    font-size: 18px;
+                    margin: 10px 0;
+                }}
+            </style>
         </head>
         <body>
-            <h1>Current Date and Time Information</h1>
-            <p>Date and Time : {dt}</p>
-            <p>Month : {dt.month}</p>
-            <p>Day : {dt.day}</p>
-            <p>Hour : {dt.hour}</p>
-            <p>Minute: {dt.minute}</p>
-            <p>Second: {dt.second}</p>
-            <p>Microsecond: {dt.microsecond}</p>
-            <p>---------------</p>
-            <p>Short Day Name : {dt.strftime('%a')}</p>
-            <p>Full Day Name : {dt.strftime('%A')}</p>
-            <p>Week Number : {dt.strftime('%W')}</p>
-            <p>Day Number : {dt.strftime('%w')}</p>
-            <p>Month Number : {dt.strftime('%m')}</p>
+            <div class="container">
+                <h1>Current Date and Time</h1>
+                <p><b>Today Date:</b> {today_date}</p>
+                <p><b>Time:</b> {current_time}</p>
+            </div>
         </body>
     </html>
     """
     return HttpResponse(data)
 
-Step 6: Configure URL pattren 
+📌 Step 6: Configure URL Pattern
+DateTimeProject/urls.py
 
-DateTimeProject/DateTimeProject/urls.py
----------------------------------------
 from django.contrib import admin
 from django.urls import path
 from DateTimeApp import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('get_date_time',views.date_time_view),
+    path('get_date_time/', views.date_time_view),
 ]
 
+📌 Step 7: Run the Server and Test
+Start server:
 
-Step 7: Start the developement server and send HTTP request to the server 
-	py manage.py runserver 
-	Send Request : http://127.0.0.1:8000/get_date_time 
+py manage.py runserver
 
+Visit in browser:
+👉 http://127.0.0.1:8000/get_date_time/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+✅ Final Output:
+You will see a neat web page with a plain background, showing the current date and time along with detailed components (year, month, day, weekday, etc.).

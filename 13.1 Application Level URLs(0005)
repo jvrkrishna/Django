@@ -1,20 +1,20 @@
-Project No: 0005
-Project Name: Application level URLs
-*************************************
-Step 1: Create project 
-	django-admin startproject NewsProject
+Project No: 0004 (Improved Version 0003 Project folder)
+Project Name: Creating Multiple Apps in One Django Project (Using urls.py inside each app)
 
-Step 2: Enter into the project 
-	cd NewsProject 
+📌 Step 1: Create the Django Project
+django-admin startproject HIETECH
 
-Step 3: Create 3 different application 
-	py manage.py startapp CricketNewsApp
-	py manage.py startapp HockeyNewsApp
-	py manage.py startapp TechNewsApp
+📌 Step 2: Enter into the Project Directory
+cd HIETECH
 
-Step 4: Install all 3 application inside settings.py file 
-NewsProject/NewsProject/settings.py
-------------------------------------
+📌 Step 3: Create Django Applications
+py manage.py startapp Students
+py manage.py startapp Fees
+py manage.py startapp Courses
+
+
+Add them to HIETECH/settings.py:
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -22,104 +22,90 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'CricketNewsApp',
-    'HockeyNewsApp',
-    'TechNewsApp',
+    'Students',
+    'Fees',
+    'Courses',
 ]
- 
 
-Step 5: Define the view function for each application 
+📌 Step 4: Define View Functions
+Students/views.py
+from django.shortcuts import HttpResponse
 
-NewsProject/CricketNewsApp/views.py
------------------------------------
-from django.shortcuts import render,HttpResponse
+def student_view1(request):
+    return HttpResponse('<h1>Hello, you are in the Students section (view1)</h1>')
 
-# Create your views here.
-def cricket_view(request):
-    return HttpResponse('<h1>Tahlia McGrath wraps series 3-0 for Australia A after India A batting crumbles</h1>')
+def student_view2(request):
+    return HttpResponse('<h1>Hello, you are in the Students section (view2)</h1>')
 
+Fees/views.py
+from django.shortcuts import HttpResponse
 
-NewsProject/HockeyNewsApp/views.py
------------------------------------
-from django.shortcuts import render,HttpResponse
-# Create your views here.
-def hockey_news(request):
-    return HttpResponse('<h1> Canada players celebrate with their gold medals after defeating Sweden in the mens ice hockey gold </h1>')
+def fees_view(request):
+    return HttpResponse('<h1>Hello, you are in the Fees section</h1>')
 
+Courses/views.py
+from django.shortcuts import HttpResponse
 
-NewsProject/TechNewsApp/views.py
------------------------------------
-from django.shortcuts import render,HttpResponse
+def course_view(request):
+    return HttpResponse('<h1>Hello, you are in the Courses section</h1>')
 
-# Create your views here.
-def tech_view(request):
-    return HttpResponse('<h1>Independence Day sale on Amazon, Flipkart: Best deals on smartphones, laptops, smart TVs here</h1>')
-
-
-
-Step 6: Create urls.py file inside each application folder
-
-Step 7: Define application level url 
-
-NewsProject/CricketNewsApp/urls.py
------------------------------------
+📌 Step 5: Create urls.py inside each app
+Students/urls.py
 from django.urls import path
 from . import views
+
 urlpatterns = [
-    path('cricket_news/', views.cricket_view),
+    path('view1/', views.student_view1, name="student_view1"),
+    path('view2/', views.student_view2, name="student_view2"),
 ]
 
-
-NewsProject/HockeyNewsApp/urls.py
------------------------------------
-
+Fees/urls.py
 from django.urls import path
 from . import views
+
 urlpatterns = [
-    path('hockey_news/', views.hockey_news),
+    path('', views.fees_view, name="fees_view"),
 ]
 
-NewsProject/TechNewsApp/urls.py
------------------------------------
+Courses/urls.py
 from django.urls import path
 from . import views
+
 urlpatterns = [
-    path('tech_news/', views.tech_view),
+    path('', views.course_view, name="course_view"),
 ]
 
-
-Step 8: Include application level urls.py file in project level using include() function 
-
-NewsProject/NewsProject/urls.py
--------------------------------
+📌 Step 6: Configure Project-Level urls.py
+HIETECH/urls.py
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('CricketNewsApp/',include('CricketNewsApp.urls')),
-    path('HockeyNewsApp/',include('HockeyNewsApp.urls')),
-    path('TechNewsApp/',include('TechNewsApp.urls')),
+
+    # Include app-level urls
+    path('students/', include('Students.urls')),
+    path('fees/', include('Fees.urls')),
+    path('courses/', include('Courses.urls')),
 ]
 
+📌 Step 7: Run Development Server
+py manage.py runserver
 
-Step 9: Start developement server and send HTTP request 
-	http://127.0.0.1:8000/CricketNewsApp/cricket_news/
-	http://127.0.0.1:8000/HockeyNewsApp/hockey_news/
-	http://127.0.0.1:8000/TechNewsApp/tech_news/
+📌 Step 8: Test URLs
 
+Students App:
+http://127.0.0.1:8000/students/view1/
+http://127.0.0.1:8000/students/view2/
 
+Fees App:
+http://127.0.0.1:8000/fees/
 
+Courses App:
+http://127.0.0.1:8000/courses/
 
-
-
-
-
-
-
-
-
-
-
-
-
+✅ Advantages of this structure:
+Keeps each app self-contained.
+Easier to maintain as the project grows.
+No conflicts with multiple views.py.
+Cleaner project-level urls.py.

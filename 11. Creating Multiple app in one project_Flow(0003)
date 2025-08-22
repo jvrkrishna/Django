@@ -1,23 +1,19 @@
 Project No: 0003
-Project Name: Creating multiple app in one project
-0003_Creating Multiple app in one project_Flow******************************************************
+Project Name: Creating Multiple Apps in One Django Project
 
-Step 1: Create the django project 
-	django-admin startproject HIETECH
+📌 Step 1: Create the Django Project
+django-admin startproject HIETECH
 
-Step 2: Enter into the project 
-	cd HIETECH
+📌 Step 2: Enter into the Project Directory
+cd HIETECH
 
-Step 3: Create django application 
-	py manage.py startapp Students
-	py manage.py startapp Fees
-	py manage.py startapp Courses
+📌 Step 3: Create Django Applications
+py manage.py startapp Students
+py manage.py startapp Fees
+py manage.py startapp Courses
 
+Add them to INSTALLED_APPS inside HIETECH/settings.py:
 
-and install it inside settings.py file 
-	
-HIETECH/HIETECH/settings.py
-------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,40 +25,31 @@ INSTALLED_APPS = [
     'Fees',
     'Courses',
 ]
-	
 
-Step 4: Define view function for Students app, Fees app and Courses app
+📌 Step 4: Define View Functions for Each App
+Students/views.py
+from django.shortcuts import HttpResponse
 
-HIETECH/Students/views.py
----------------------------
-from django.shortcuts import render,HttpResponse
+def student_view1(request):
+    return HttpResponse('<h1>Hello, you are in the Students section (view1)</h1>')
 
-# Create your views here.
-def student_view(request):
-    return HttpResponse('<h1>Hello you are in the student section of Hie tech </h1>')
+def student_view2(request):
+    return HttpResponse('<h1>Hello, you are in the Students section (view2)</h1>')
 
-HIETECH/Fees/views.py
----------------------------
-from django.shortcuts import render,HttpResponse
+Fees/views.py
+from django.shortcuts import HttpResponse
 
-# Create your views here.
 def fees_view(request):
-    return HttpResponse('<h1>Hello you are in the fees section of Hie Tech </h1>')
+    return HttpResponse('<h1>Hello, you are in the Fees section</h1>')
 
-HIETECH/Courses/views.py
----------------------------
-from django.shortcuts import render,HttpResponse
+Courses/views.py
+from django.shortcuts import HttpResponse
 
-# Create your views here.
 def course_view(request):
-    return HttpResponse('<h1>Hello you are in the course section of Hie Tech </h1>')
+    return HttpResponse('<h1>Hello, you are in the Courses section</h1>')
 
-
-
-Step 5: Define URL pattern 
-
-HIETECH/HIETECH/urls.py
---------------------------
+📌 Step 5: Define URL Patterns
+HIETECH/urls.py
 from django.contrib import admin
 from django.urls import path
 from Students import views as v1
@@ -71,41 +58,30 @@ from Courses import views as v3
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('students/',v1.student_view),
-    path('fees/',v2.fees_view),
-    path('courses/',v3.course_view),
+
+    # Students App URLs
+    path('students/view1/', v1.student_view1),
+    path('students/view2/', v1.student_view2),
+
+    # Fees App URL
+    path('fees/', v2.fees_view),
+
+    # Courses App URL
+    path('courses/', v3.course_view),
 ]
 
-Note :: Here v1, v2 and v3 are the alish name of views. If we will not uses these alish name then django by defaullt consider the last view then we will get attribute error because of naming conflict problem 
 
+🔑 Note:
+We use as v1, as v2, as v3 while importing views because each app has a views.py file.
+Without aliasing, Python would overwrite the imports and cause conflicts.
 
-Step 6: Start Developement Server and send HTTP request.
-	py manage.py runserver 
-	
-	send request:
-	http://127.0.0.1:8000/students/
-	http://127.0.0.1:8000/fees/
-	http://127.0.0.1:8000/courses/
+📌 Step 6: Run Development Server and Test
 
+Start server:
+py manage.py runserver
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Test the URLs in your browser:
+http://127.0.0.1:8000/students/view1/
+http://127.0.0.1:8000/students/view2/
+http://127.0.0.1:8000/fees/
+http://127.0.0.1:8000/courses/
