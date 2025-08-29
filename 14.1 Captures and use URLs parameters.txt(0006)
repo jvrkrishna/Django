@@ -37,10 +37,10 @@ def display_id(request,id):
 def display_name(request,name):
     return HttpResponse(name)
 
-def display_sal(request,sal):
-    sal=float(sal)
-    print(type(sal))
-    return HttpResponse(sal)
+def display_sal(request, sal):
+    sal = float(sal)
+    return HttpResponse(f"Salary is: {sal}")
+    
 def display_roll_name(request,roll,name):
     return HttpResponse(f'Roll is : {roll} and Name is : {name}')
 
@@ -80,7 +80,23 @@ Step 8: Start developement server and send HTTP Request
 
 
 
+🚀 Extra Tip: Default Views with Query Parameters
 
+What you did works with path parameters, but sometimes you’ll want query string parameters (e.g., /App1/display?id=23&name=ram).
+Example:
+
+def display_query(request):
+    id = request.GET.get("id")
+    name = request.GET.get("name")
+    return HttpResponse(f"ID: {id}, Name: {name}")
+
+
+And in urls.py:
+path('display_query/', views.display_query),
+
+
+Then call:
+http://127.0.0.1:8000/App1/display_query/?id=23&name=ram
 
 
 
