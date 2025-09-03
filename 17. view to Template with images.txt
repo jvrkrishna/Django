@@ -1,14 +1,113 @@
-1.	Create static folder in project level
-C:\Users\jvrkr\git_repo\Django_projects\0009\Sample_Project>mkdir static
-2.	Add Images to that folder
-3.	Set the STATICFILES_DIRS in settings.py
-STATICFILES_DIRS=[os.path.join(BASE_DIR, 'static')]   
-4.	In template the load the static files ---- use template tag—{% %}
-Example:
+🚀 Step-by-Step Django Static Files Setup (Full Project)
+1. Create Django Project
+
+Open terminal / cmd:
+django-admin startproject Sample_Project
+cd Sample_Project
+
+Now you’ll have:
+Sample_Project/
+├── manage.py
+├── Sample_Project/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+
+2. Create an App
+python manage.py startapp myapp
+
+Now project structure:
+Sample_Project/
+├── manage.py
+├── Sample_Project/
+│   ├── settings.py
+│   ├── urls.py
+│   └── ...
+├── myapp/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── views.py
+│   ├── urls.py   👈 create this manually
+│   └── templates/
+│       └── myapp/
+│           └── static_example.html
+
+3. Add myapp to Installed Apps
+In Sample_Project/settings.py:
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'myapp',   # 👈 add this
+]
+
+4. Configure Static Files in settings.py
+At bottom of settings.py:
+
+import os
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# For production use (collectstatic) you’d add:
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+5. Create Static Folder
+mkdir static
+mkdir static/images
+
+Add an image, e.g. static/images/my_pic.jpg.
+
+6. Create Template
+In myapp/templates/myapp/static_example.html:
+
 {% load static %}
 <html>
-<head> <title>This is static template</title></head>
+<head>
+    <title>This is static template</title>
+</head>
 <body>
-<img src="{% static "if any folder_name/filename.extention" %}" alt="Image not Found"/>
+    <h2>Static Image Example</h2>
+    <img src="{% static 'images/my_pic.jpg' %}" alt="Image not Found"/>
 </body>
 </html>
+
+7. Create View in myapp/views.py
+from django.shortcuts import render
+
+def static_example(request):
+    return render(request, "myapp/static_example.html")
+
+8. App-level urls.py (inside myapp/urls.py)
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('static-example/', views.static_example, name="static_example"),
+]
+
+9. Project-level urls.py (inside Sample_Project/urls.py)
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('myapp.urls')),   # 👈 include app-level urls
+]
+
+10. Run the Server
+python manage.py runserver
+
+Go to:
+http://127.0.0.1:8000/static-example/

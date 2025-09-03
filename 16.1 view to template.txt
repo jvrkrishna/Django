@@ -1,19 +1,15 @@
 Project No: 0008
 Project Name: VtoTProject
 **********************************************
-Step 1: Create project 
-	django-admin startproject VtoTProject
+🚀 Full Workflow
+1. Create Project
+django-admin startproject TemplateProject
+cd TemplateProject
 
-Step 2: Enter into the project 
-	cd VtoTProject
+2. Create App
+py manage.py startapp App1
 
-Step 3: Create django application 
-	py manage.py startapp App1
-
-Step 4: Install the application inside settings.py file 
-
-VtoTProject/VtoTProject/settings.py
------------------------------------------------
+3. Install App in settings.py
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -21,70 +17,61 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'App1'
+    'App1',
 ]
 
-Step 5: Define the view function 
-VtoTProject/App1/views.py
---------------------------------
-from django.shortcuts import render,HttpResponse
+4. Create Views (App1/views.py)
+from django.shortcuts import render, HttpResponse
 
-# Create your views here.
-def sample_view(request):
-    return HttpResponse("<h1>This is Sample view page.</h1>")
+def addAdmission(request):
+    return HttpResponse("<h1>This is add admission view.</h1>")
 
-Step 5.1:Update in Project level urls.py
+def admissionReport(request):
+    return HttpResponse("<h1>This is admission report view</h1>")
 
-from django.urls import path
-from App1 import views
+5. Project-level URLs (TemplateProject/urls.py)
+from django.contrib import admin
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('sample/',views.sample_view),
+    path('App1/', include('App1.urls')),
 ]
 
-Now check ---->python manage.py runserver
-             ->http://127.0.0.1:8000/sample
-
-Step 6: Define Application level urls
-VtoTProject/App1/urls.py
-------------------------------
+6. App-level URLs (App1/urls.py)
 from django.urls import path
 from . import views
-urlpatterns = [
-    path('sample/', views.sample_view),
-]
-
-Step 7: Modify in  Project level urls
-VtoTProject/VtoTProject/urls.py
---------------------------------------------
-from django.contrib import admin
-from django.urls import path,include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('App1/',include('App1.urls')),
+    path('addA/', views.addAdmission),
+    path('admissionR/', views.admissionReport),
 ]
 
-Now check ---->python manage.py runserver
-             ->http://127.0.0.1:8000/App1/sample
+7. Create Templates Directory
+mkdir templates
+cd templates
+mkdir App1
 
-Steps to Create Template:
-----------------------------------
-    --Setup the templates folder
-----------------------------------
-Step 8: Create Project level templates folder and inside that create AppName folder
-    0008/VtoTProject>mkdir templates
-    0008/VtoTProject>cd templates
-    0008/VtoTProject>mkdir App1
 
-    --Setup DIRS in settings.py
------------------------------------
-Step 9:  Navigate to project level Settings and check the DIRS option within the TEMPLATES setting to make sure it includes the path to your templates directory.
-    Go to ---> 0008-->VtoTProject-->settings.py
-    --import os (Add this command in top of the content in setting.py)
+Now structure looks like:
+TemplateProject/
+│
+├── App1/
+│   ├── views.py
+│   ├── urls.py
+│   └── ...
+│
+├── templates/
+│   └── App1/
+│       ├── add-admission.html
+│       └── admission-report.html
 
-    TEMPLATES = [
+8. Update settings.py to Use Templates
+At the top:
+import os
+
+In TEMPLATES:
+TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
@@ -99,42 +86,38 @@ Step 9:  Navigate to project level Settings and check the DIRS option within the
     },
 ]
 
-    --Create a template
---------------------------------------
-Step 10: Now navigate to 0008-->VtoTProject-->templates-->App1
-    --Create template files and add html code
-    sample.html
+9. Create Template Files
 
-<!DOCTYPE html>
+📄 add-admission.html
 <html>
-<head>
-    <title>My Template</title>
-</head>
-<body>
-    <h1>Hello, {{ name }}!</h1>
-    <p>Age: {{ age }}</p>
-    <ul>
-        {% for item in items %}
-            <li>{{ item }}</li>
-        {% endfor %}
-    </ul>
+<head><title>Add Admission</title></head>
+<body bgcolor="red">
+    This is Add-Admission Page
 </body>
 </html>
 
-    --use template in views
---------------------------------------
-Step 11: Now navigate to app level views and use the render() function to load and render your templates. Pass a context dictionary to the render() function containing the data you want to display in the template.
 
+📄 admission-report.html
+<html>
+<head><title>Admission Report</title></head>
+<body bgcolor="green">
+    This is Admission-Report Page
+</body>
+</html>
+
+10. Update Views to Use Templates
 from django.shortcuts import render
 
-# Create your views here.
-def sample_view(request):
-    data = {
-        'name': 'Ram',
-        'age': 30,
-        'items': ['Apples', 'Bananas', 'Cherries']
-    }
-    return render(request, 'App1/sample.html', context=data)
+def addAdmission(request):
+    return render(request, 'App1/add-admission.html')
 
-Now check ---->python manage.py runserver
-             ->http://127.0.0.1:8000/App1/sample
+def admissionReport(request):
+    return render(request, 'App1/admission-report.html')
+
+11. Run Server & Test
+py manage.py runserver
+
+
+Open in browser:
+👉 http://127.0.0.1:8000/App1/addA
+👉 http://127.0.0.1:8000/App1/admissionR
