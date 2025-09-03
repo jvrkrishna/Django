@@ -1,23 +1,17 @@
-🚀 Step-by-Step Django Static Files Setup (Full Project)
-1. Create Django Project
+1. Create Project & App
+>django-admin startproject Sample_Project
+>cd Sample_Project
+>python manage.py startapp myapp
 
-Open terminal / cmd:
-django-admin startproject Sample_Project
-cd Sample_Project
 
-Now you’ll have:
-Sample_Project/
-├── manage.py
-├── Sample_Project/
-│   ├── __init__.py
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
+✅ Add 'myapp' in INSTALLED_APPS inside Sample_Project/settings.py.
 
-2. Create an App
-python manage.py startapp myapp
+✅ Create:
+>myapp/templates/myapp/static_example.html
+>myapp/static/myapp/my_pic.png
+>myapp/urls.py
 
-Now project structure:
+Project Structure
 Sample_Project/
 ├── manage.py
 ├── Sample_Project/
@@ -25,71 +19,76 @@ Sample_Project/
 │   ├── urls.py
 │   └── ...
 ├── myapp/
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── models.py
 │   ├── views.py
-│   ├── urls.py   👈 create this manually
-│   └── templates/
+│   ├── urls.py
+│   ├── templates/
+│   │   └── myapp/
+│   │       └── static_example.html
+│   └── static/
 │       └── myapp/
-│           └── static_example.html
+│           └── images/
+│               └── my_pic.png
 
-3. Add myapp to Installed Apps
-In Sample_Project/settings.py:
-
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'myapp',   # 👈 add this
-]
-
-4. Configure Static Files in settings.py
-At bottom of settings.py:
-
+2. settings.py (Project Level)
+At the top:
 import os
-from pathlib import Path
-BASE_DIR = Path(__file__).resolve().parent.parent
 
+At the bottom:
+# Static files
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
 
-# For production use (collectstatic) you’d add:
+# Collect static files from each app automatically
+STATICFILES_DIRS = []   # leave empty if only using app-level static
+# For production (collectstatic):
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-5. Create Static Folder
-mkdir static
-mkdir static/images
+# Templates
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],   # project-level templates if you add any
+        'APP_DIRS': True,  # 👈 enables app-level templates
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
-Add an image, e.g. static/images/my_pic.jpg.
 
-6. Create Template
-In myapp/templates/myapp/static_example.html:
+👉 Key points:
+APP_DIRS=True → loads myapp/templates/myapp/...
 
+No need for STATICFILES_DIRS unless using a global /static/ folder
+
+App-level static (myapp/static/myapp/...) is auto-detected
+
+3. Template (myapp/templates/myapp/static_example.html)
 {% load static %}
 <html>
 <head>
-    <title>This is static template</title>
+    <title>App-level static example</title>
 </head>
 <body>
     <h2>Static Image Example</h2>
-    <img src="{% static 'images/my_pic.jpg' %}" alt="Image not Found"/>
+    <img src="{% static 'myapp/images/my_pic.png' %}" alt="Image not Found"/>
 </body>
 </html>
 
-7. Create View in myapp/views.py
+
+⚡ Path is myapp/images/my_pic.png (because static is inside myapp/static/myapp/).
+
+4. View (myapp/views.py)
 from django.shortcuts import render
 
 def static_example(request):
     return render(request, "myapp/static_example.html")
 
-8. App-level urls.py (inside myapp/urls.py)
+5. App URLs (myapp/urls.py)
 from django.urls import path
 from . import views
 
@@ -97,17 +96,21 @@ urlpatterns = [
     path('static-example/', views.static_example, name="static_example"),
 ]
 
-9. Project-level urls.py (inside Sample_Project/urls.py)
+6. Project URLs (Sample_Project/urls.py)
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('myapp.urls')),   # 👈 include app-level urls
+    path('', include('myapp.urls')),
 ]
 
-10. Run the Server
+7. Run the Server
 python manage.py runserver
 
-Go to:
-http://127.0.0.1:8000/static-example/
+
+👉 Visit: http://127.0.0.1:8000/static-example/
+
+👉 The image should load from:
+http://127.0.0.1:8000/static/myapp/images/my_pic.png
+
