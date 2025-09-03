@@ -1,48 +1,51 @@
-1. Create Project & App
->django-admin startproject Sample_Project
->cd Sample_Project
->python manage.py startapp myapp
+Step 1: Create Project and App
+>django-admin startproject MyProject
+>cd MyProject
+>py manage.py startapp App1
+
+Step 2: Register the App
+📄 MyProject/settings.py
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'App1',  # ✅ add app here
+]
+
+Step 3: Create App-level Templates and Static
+
+Inside App1/ create:
+
+mkdir templates
+mkdir templates/App1
+mkdir static
+mkdir static/App1
 
 
-✅ Add 'myapp' in INSTALLED_APPS inside Sample_Project/settings.py.
+Now place your HTML and image:
 
-✅ Create:
->myapp/templates/myapp/static_example.html
->myapp/static/myapp/my_pic.png
->myapp/urls.py
+App1/
+│
+├── templates/
+│   └── App1/
+│       └── static_example.html
+│
+└── static/
+    └── App1/
+        └── images/
+            └── my_pic.png
 
-Project Structure
-Sample_Project/
-├── manage.py
-├── Sample_Project/
-│   ├── settings.py
-│   ├── urls.py
-│   └── ...
-├── myapp/
-│   ├── views.py
-│   ├── urls.py
-│   ├── templates/
-│   │   └── myapp/
-│   │       └── static_example.html
-│   └── static/
-│       └── myapp/
-│           └── images/
-│               └── my_pic.png
+Step 4: Configure settings.py
+📄 MyProject/settings.py
 
-2. settings.py (Project Level)
-At the top:
+#At the top add import os:
 import os
 
-At the bottom:
-# Static files
-STATIC_URL = '/static/'
-
-# Collect static files from each app automatically
-STATICFILES_DIRS = []   # leave empty if only using app-level static
-# For production (collectstatic):
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Templates
+# In the Templates location check for 'DIRS' and 'APP_DIRS'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -59,58 +62,68 @@ TEMPLATES = [
     },
 ]
 
+At the bottom:
+# Static files
+STATIC_URL = '/static/'
+
+# Collect static files from each app automatically
+STATICFILES_DIRS = []   # leave empty if only using app-level static
+# For production (collectstatic):
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 👉 Key points:
 APP_DIRS=True → loads myapp/templates/myapp/...
-
 No need for STATICFILES_DIRS unless using a global /static/ folder
 
 App-level static (myapp/static/myapp/...) is auto-detected
 
-3. Template (myapp/templates/myapp/static_example.html)
+Step 5: Create Template
+
+📄 App1/templates/App1/static_example.html
+
 {% load static %}
+<!DOCTYPE html>
 <html>
 <head>
-    <title>App-level static example</title>
+    <title>Static Example</title>
 </head>
 <body>
-    <h2>Static Image Example</h2>
-    <img src="{% static 'myapp/images/my_pic.png' %}" alt="Image not Found"/>
+    <h1>Static File Demo</h1>
+    <img src="{% static 'App1/images/my_pic.png' %}" alt="Image not found" width="300">
 </body>
 </html>
 
+⚡ Path is App1/images/my_pic.png
 
-⚡ Path is myapp/images/my_pic.png (because static is inside myapp/static/myapp/).
+Step 6: Create App-level View
+📄 App1/views.py
 
-4. View (myapp/views.py)
 from django.shortcuts import render
-
 def static_example(request):
-    return render(request, "myapp/static_example.html")
+    return render(request, 'App1/static_example.html')
 
-5. App URLs (myapp/urls.py)
+Step 7: Create App-level URLs
+📄 App1/urls.py
+
 from django.urls import path
 from . import views
-
 urlpatterns = [
-    path('static-example/', views.static_example, name="static_example"),
+    path('static-demo/', views.static_example, name='static_example'),
 ]
 
-6. Project URLs (Sample_Project/urls.py)
+Step 8: Modify Project-level URLs
+📄 MyProject/urls.py
+
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('myapp.urls')),
+    path('App1/', include('App1.urls')),  # include app URLs
 ]
 
-7. Run the Server
-python manage.py runserver
+Step 9: Run the Server
+py manage.py runserver
 
-
-👉 Visit: http://127.0.0.1:8000/static-example/
-
-👉 The image should load from:
-http://127.0.0.1:8000/static/myapp/images/my_pic.png
-
+Open in browser:
+👉 http://127.0.0.1:8000/App1/static-demo/
