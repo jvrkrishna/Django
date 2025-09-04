@@ -1,0 +1,18 @@
+{% load static %}
+<html>
+    <head>
+        <title>App1 Home</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    </html>
+    <body>
+    <h1>This is App1 Home page</h1>
+    <img src="/media/sample.jpg" alt="Sample Image">
+    <nav>
+        <a href="{% url 'home' %}">Project Home</a> |
+        <a href="{% url 'App1_about' %}">About</a> |
+        <a href="{% url 'App1_contact' %}">Contact</a> |
+        <a href="{% url 'App1_index' %}">Index</a>
+    </nav>
+    </body>
+</html>
