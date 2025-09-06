@@ -1,13 +1,13 @@
 📘 Django Project with Bootstrap + Dropdown Menus
 1. Create Project & App
-django-admin startproject Sample_Project
-cd Sample_Project
+django-admin startproject sample_project1
+cd sample_project1
 python manage.py startapp App1
 
 Project structure:
-Sample_Project/
+sample_project1/
 ├── manage.py
-├── Sample_Project/
+├── sample_project1/
 │   ├── settings.py
 │   ├── urls.py
 │   ├── views.py
@@ -20,7 +20,7 @@ Sample_Project/
     └── media/
 
 2. Register App
-📄 Sample_Project/settings.py
+📄 sample_project1/settings.py
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,7 +37,7 @@ Create project-level templates/ folder:
 mkdir templates
 
 
-📄 Sample_Project/settings.py
+📄 sample_project1/settings.py
 from pathlib import Path
 import os
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -59,7 +59,7 @@ TEMPLATES = [
 ]
 
 4. Static & Media Setup
-📄 Sample_Project/settings.py
+📄 sample_project1/settings.py
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]   # global static
 STATIC_ROOT = BASE_DIR / "assets"          # for collectstatic
@@ -84,8 +84,8 @@ h1 {
 
 
 Add sample image: App1/media/sample.jpg
-5. Base Template with Bootstrap + Dropdown
 
+5. Base Template with Bootstrap + Dropdown
 📄 templates/base.html
 {% load static %}
 <!DOCTYPE html>
@@ -101,7 +101,7 @@ Add sample image: App1/media/sample.jpg
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home' %}">Sample_Project</a>
+            <a class="navbar-brand" href="{% url 'home' %}">sample_project1</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
                 data-bs-target="#navbarNav" aria-controls="navbarNav" 
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -140,7 +140,7 @@ Add sample image: App1/media/sample.jpg
 </html>
 
 6. Project-Level Home
-📄 Sample_Project/views.py
+📄 sample_project1/views.py
 from django.shortcuts import render
 def home(request):
     return render(request, 'home.html')
@@ -223,7 +223,7 @@ urlpatterns = [
 ]
 
 
-📄 Sample_Project/urls.py
+📄 sample_project1/urls.py
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
