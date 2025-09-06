@@ -1,0 +1,18 @@
+{% extends 'example.html' %}
+
+{% block title %}<title>Display Page</title>{% endblock %}
+
+{% block content %}
+<h2>Welcome to the Display Page</h2>
+
+{% if friends %}
+    <h3>Friends List:</h3>
+    <ul>
+    {% for i in friends %}
+        <li>{{forloop.counter}}. {{i}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No friends available.</p>
+{% endif %}
+{% endblock %}

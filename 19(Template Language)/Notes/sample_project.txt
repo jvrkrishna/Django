@@ -1,0 +1,263 @@
+Template Language
+In Django, template inheritance helps you reuse common parts like navbar, footer, and layout without rewriting them on every HTML page.
+
+In the code snippet you've provided, you're seeing Django template language (DTL) syntax. Specifically, the {% block title %} syntax is used for defining blocks that can be overridden in child templates. This is typically part of Django's templating system where you can create a base template with common structure and allow child templates to insert or modify specific sections.
+
+Here's how it works:
+1. Base Template (where the block is defined)
+In your base template (base.html or similar), you define a block for the title:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}
+    <title>My Site</title>
+    {% endblock %}
+</head>
+<body>
+    <h1>Welcome to My Site</h1>
+    {% block content %}{% endblock %}
+</body>
+</html>
+
+In this case, you're defining a block called title that contains the default <title> of "My Site." This is the base behavior.
+
+2. Child Template (where the block is overridden)
+Now, in your child templates, you can override the title block to customize the title for that specific page:
+
+{% extends "base.html" %}
+
+{% block title %}
+<title>Custom Page Title</title>
+{% endblock %}
+
+{% block content %}
+    <p>This is the content for a custom page.</p>
+{% endblock %}
+
+
+In this example, the child template overrides the title block with "Custom Page Title," so that the <title> tag will reflect this new title in the browser's tab when you view the page.
+
+Why Use {% block %}?
+Reusability: It lets you define a common structure in a base template and customize specific parts in child templates.
+
+Maintainability: You can make changes in one place (the base template) and have them propagate throughout all child templates.
+
+So, to summarize:
+{% block title %} defines a block that can be overridden in child templates.
+
+You can customize this title block in individual templates as needed.
+
+*************************************************************
+🛠️ Step 1: Create a Django Project
+Open your terminal and run:
+
+>django-admin startproject Sample_Project
+
+This creates:
+Sample_Project/
+│── manage.py
+│── Sample_Project/
+    │── __init__.py
+    │── settings.py
+    │── urls.py
+    │── wsgi.py
+    │── asgi.py
+
+🛠️ Step 2: Create an App
+Inside the project folder:
+>cd Sample_Project
+>python manage.py startapp main
+
+Now structure looks like:
+Sample_Project/
+│── manage.py
+│── Sample_Project/
+│   │── settings.py
+│   │── urls.py
+│── main/
+    │── views.py
+    │── urls.py   (we will create this file)
+    │── templates/
+    │── static/
+
+🛠️ Step 3: Register App in settings.py
+Open Sample_Project/settings.py and add "main" to INSTALLED_APPS:
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'main',   # our app
+]
+
+Also configure templates and static:
+import os
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'main', 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'main', 'static')]
+
+🛠️ Step 4: Views (main/views.py)
+from django.shortcuts import render
+def home(request):
+    name = "Rama Krishna"
+    friends = ["Ram", "Hari", "Chanti"]
+    return render(request, "index.html", {"name": name, "friends": friends})
+
+def about(request):
+    return render(request, "about.html")
+
+def contact(request):
+    return render(request, "contact.html")
+
+def display(request):
+    friends = ["Ram", "Hari", "Chanti"]
+    return render(request, "display.html", {"friends": friends})
+
+🛠️ Step 5: App URLs (main/urls.py)
+Create a file main/urls.py:
+
+from django.urls import path
+from . import views
+urlpatterns = [
+    path("", views.home, name="home"),
+    path("about/", views.about, name="about"),
+    path("contact/", views.contact, name="contact"),
+    path("display/", views.display, name="display"),
+]
+
+🛠️ Step 6: Project URLs (Sample_Project/urls.py)
+#Update to include app routes:
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", include("main.urls")),  # include app urls
+]
+
+🛠️ Step 7: Templates (main/templates/)
+📌 example.html (Base template)
+<!DOCTYPE html>
+<html>
+<head>
+    {% block title %}<title>My Site</title>{% endblock %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>My Website</h1>
+        <nav>
+            <a href="/">Home</a> | 
+            <a href="/about/">About</a> | 
+            <a href="/contact/">Contact</a> | 
+            <a href="/display/">Display</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2025 My Website</p>
+    </footer>
+</body>
+</html>
+
+📌 index.html
+{% extends 'example.html' %}
+
+{% block title %}<title>Home Page</title>{% endblock %}
+
+{% block content %}
+<h2>This is Home Page</h2>
+<h3>My name is {{name}}</h3>
+
+<ul>
+{% for i in friends %}
+  <li>{{forloop.counter}}. {{i}}</li>
+{% endfor %}
+</ul>
+{% endblock %}
+
+📌 about.html
+{% extends 'example.html' %}
+
+{% block title %}<title>About Page</title>{% endblock %}
+
+{% block content %}
+<h2>This is About Page</h2>
+<p>Welcome to the about page.</p>
+{% endblock %}
+
+📌 contact.html
+{% extends 'example.html' %}
+
+{% block title %}<title>Contact Page</title>{% endblock %}
+
+{% block content %}
+<h2>This is Contact Page</h2>
+<p>You can reach us via email at: support@mysite.com</p>
+{% endblock %}
+
+📌 display.html
+{% extends 'example.html' %}
+
+{% block title %}<title>Display Page</title>{% endblock %}
+
+{% block content %}
+<h2>Welcome to the Display Page</h2>
+
+{% if friends %}
+    <h3>Friends List:</h3>
+    <ul>
+    {% for i in friends %}
+        <li>{{forloop.counter}}. {{i}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No friends available.</p>
+{% endif %}
+{% endblock %}
+
+🛠️ Step 8: Static Files (main/static/css/style.css)
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f9fa;
+}
+h1 {
+    color: darkblue;
+}
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+🛠️ Step 9: Run Project
+python manage.py runserver
+
+
+Open in browser:
+http://127.0.0.1:8000/ → Home Page
+http://127.0.0.1:8000/about/ → About Page
+http://127.0.0.1:8000/contact/ → Contact Page
+http://127.0.0.1:8000/display/ → Display Page

@@ -42,47 +42,32 @@ This file inherits from example.html and only needs to fill in specific blocks:
 
 <!-- display.html -->
 {% extends 'example.html' %}
-
 {% block title %}Display Page{% endblock %}
-
 {% block content %}
     <h2>Welcome to the Display Page</h2>
     <p>This content is specific to the display page.</p>
 {% endblock %}
 
-
 ---
 
 ✅ 2. Static Files in Django
-
 Static files include CSS, JavaScript, images, etc. To use them:
-
 Step 1: In the template, load static at the top
-
 {% load static %}
 
 > ⚠️ Make sure you use {% %} not (% %).
 Correct syntax: {% load static %}
 
-
-
 Step 2: Use static paths like this:
-
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <script src="{% static 'js/script.js' %}"></script>
 <img src="{% static 'images/logo.png' %}" alt="Logo">
 
-
 ---
-
 ✅ Summary:
-
 Use {% extends 'base.html' %} for inheritance.
-
 Use {% block content %} and {% endblock %} to insert custom content.
-
 Use {% load static %} to access static files.
-
 Reference files using {% static 'path/to/file' %}.
 
 ****************** Practical **********************
