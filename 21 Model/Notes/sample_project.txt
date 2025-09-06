@@ -23,7 +23,6 @@ Command (Practical):
 >cd Sample_Project
 >python manage.py runserver
 
-
 Explanation:
 A project is the entire Django setup containing settings, URLs, apps, etc.
 
@@ -32,6 +31,8 @@ Running the server confirms that Django is installed and project structure is co
 📌 2. Create Django App
 Command (Practical):
 >python manage.py startapp blog
+
+#Add this app in settings.py in Installed Apps
 
 Explanation:
 A Django app is a component of your project that handles a specific feature (e.g., blog, users, payments).
@@ -115,6 +116,7 @@ python manage.py runserver
 
 Go to: http://127.0.0.1:8000/admin
 Login with superuser credentials.
+
 Check if Post model appears.
 Add/Edit/Delete posts.
 

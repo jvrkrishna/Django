@@ -1,0 +1,62 @@
+Migration, Creating Users, and Superusers in Django
+📌 1. What is Migration in Django?
+Migration is Django’s way of propagating changes you make to your models (adding fields, deleting fields, modifying constraints, etc.) into your database schema.
+
+It helps keep the database schema in sync with your Django project’s models.
+
+Key commands:
+----> python manage.py makemigrations → Creates new migration files based on model changes.
+----> python manage.py migrate → Applies migrations to the database (creates or updates tables).
+
+✅ Example:
+PS C:\Users\...\Sample_Project> python manage.py makemigrations
+No changes detected
+
+👉 This means no new model changes to apply.
+PS C:\Users\...\Sample_Project> python manage.py migrate
+
+
+👉 Applies all pending migrations.
+In your case, 18 unapplied migrations (for admin, auth, contenttypes, and sessions) were successfully applied.
+
+📌 2. Creating Users and Superusers
+Django comes with a built-in authentication system (auth app) that manages users, groups, and permissions.
+
+a) Create a Superuser
+A superuser has all permissions and can access the Django admin panel.
+
+Command:
+python manage.py createsuperuser
+
+
+Steps from your case:
+Username (leave blank to use 'jvrkr'): rk
+Email address: rk@gmail.com
+Password: 1234
+
+
+⚠️ Django checks password strength:
+Must be at least 8 characters.
+Not too common.
+Not entirely numeric.
+
+👉 Even though password was weak, you bypassed the check with y.
+✅ Superuser created successfully.
+b) Login to Admin Panel
+
+Run the server:
+python manage.py runserver
+
+
+Open in browser:
+http://127.0.0.1:8000/admin/
+
+Login with the superuser credentials (rk / 1234 in your case).
+
+📌 3. Summary
+Migration: Synchronizes models with the database schema.
+makemigrations: Prepares migration files.
+migrate: Applies migrations, creating necessary tables (e.g., auth_user, django_admin_log).
+createsuperuser: Creates an admin user with full access.
+
+Django Admin Panel: Access at http://127.0.0.1:8000/admin/ with superuser credentials.
