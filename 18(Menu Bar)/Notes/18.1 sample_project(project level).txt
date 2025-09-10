@@ -1,0 +1,93 @@
+🔹 Django Project + App (Project Home + App-Level Pages)
+🔹 Structure
+Sample_Project/
+├── manage.py
+├── Sample_Project/
+│   ├── settings.py
+│   ├── urls.py                ✅ project-level
+│   ├── views.py               ✅ project-level
+│   └── ...
+│
+├── templates/
+    └── home.html              ✅ project-level
+
+1. Create Project and App
+>mkdir 0013
+>cd 0013
+>django-admin startproject Sample_Project
+>cd Sample_Project
+>python manage.py startapp App1
+
+2. Register App
+📄 Sample_Project/settings.py
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'App1',   # ✅ register app
+]
+
+3. Project-Level Template (Home)
+>Create a templates folder in project root:
+>mkdir templates
+
+📄 templates/home.html
+<html>
+<head>
+    <title>Project Home</title>
+</head>
+<body>
+    <h1>Welcome to Project Home Page</h1>
+    <nav>
+        <a href="">Index</a> |
+        <a href="">About</a> |
+        <a href="">Contact</a> |
+        <a href="">App1 Home</a>
+    </nav>
+</body>
+</html>
+
+
+📄 Sample_Project/settings.py
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / "templates"],  # ✅ project-level
+        'APP_DIRS': True,                  # ✅ app-level too
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+4. Project-Level View
+📄 Sample_Project/views.py
+
+from django.shortcuts import render
+def home(request):
+    return render(request, 'home.html')
+
+5. Project URLs
+📄 Sample_Project/urls.py
+from django.contrib import admin
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.home),
+]
+
+
+🚀 Run Server
+python manage.py runserver
+
+🔗 Visit
+Home (project) → http://127.0.0.1:8000/

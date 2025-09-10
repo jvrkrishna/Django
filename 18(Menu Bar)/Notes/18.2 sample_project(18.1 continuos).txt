@@ -1,0 +1,15 @@
+In 18.1 we have seen Project level implementation. Now we are implementing app level also.
+
+Structure
+└── App1/
+    ├── views.py
+    ├── urls.py
+    ├── templates/
+    │   ├── index.html         ✅ app-level
+    │   ├── about.html
+    │   ├── contact.html
+    │   └── App1_home.html
+    ├── static/
+    │   └── css/style.css      ✅ app-level
+    └── media/
+        └── sample.jpg         ✅ app-level
