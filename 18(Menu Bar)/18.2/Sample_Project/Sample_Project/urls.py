@@ -23,11 +23,3 @@ urlpatterns = [
     path('',views.home, name='home'),
     path('App1/', include('App1.urls')),
 ]
-
-
-from django.conf import settings
-from django.conf.urls.static import static
-
-# ✅ Serve media files during development
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

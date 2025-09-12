@@ -1,4 +1,4 @@
-🔹 Django Project + App (Project Home + App-Level Pages)
+🔹 Django Project with project level implementation.
 🔹 Structure
 Sample_Project/
 ├── manage.py

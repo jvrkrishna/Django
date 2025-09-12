@@ -1,13 +1,9 @@
-{% load static %}     
 <html>
 <head>
     <title>App1 Home</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <h1>This is App1 Home Page</h1>
-    <img src="/media/sample.jpeg" alt="Sample Image" width="300">
-
     <nav>
         <a href="{% url 'home' %}">Project Home</a> |
         <a href="{% url 'App1_index' %}">Index</a> |

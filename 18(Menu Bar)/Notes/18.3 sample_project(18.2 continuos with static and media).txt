@@ -1,0 +1,97 @@
+🔹 In 18.1 we have seen project level implementation and in 18.2 we have seen app level implementation. in 18.3 we are focusing on app level static and media folders.
+🔹 Structure
+Sample_Project/
+└── App1/
+    ├── static/
+    │   └── css/style.css      ✅ app-level
+    └── media/
+        └── sample.jpg         ✅ app-level
+
+************* 18.3 now we are continuos with 18.2 *********************
+Step 1: Create app level static folder in that create css folder and in that create style.css file.
+
+App1/
+    ├── static/
+    │   └── css/style.css      ✅ app-level
+
+
+📄 App1/static/css/style.css
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    color: #333;
+    text-align: center;
+}
+h1 {
+    color: darkblue;
+}
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: green;
+}
+
+
+Step 2. App-Level Media Folder
+Create Media foolder inside the app and inside that insert a sample image.
+Media is for uploaded files or images.
+
+📂 Structure:
+App1/
+ └── media/
+     └── sample.jpeg   ✅ example image
+
+
+Step 3. Configure Settings
+
+📄 Sample_Project/settings.py
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Static files (CSS/JS/Images)
+STATIC_URL = '/static/'
+
+# ✅ Collect static from apps too
+STATICFILES_DIRS = []
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Media files (uploads, app-level images)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "App1/media"
+
+
+Step 4. Load Static in Templates
+In which place we need for that we can modify templates html files accordingly.
+
+Example: App1/templates/App1_home.html
+{% load static %}    
+<html>
+<head>
+    <title>App1 Home</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>This is App1 Home Page</h1>
+    <img src="/media/sample.jpeg" alt="Sample Image" width="300">
+                    or use this below line
+    <img src="{{ MEDIA_URL }}sample.jpeg" alt="Sample Image">
+    <nav>
+        <a href="{% url 'home' %}">Project Home</a> |
+        <a href="{% url 'App1_index' %}">Index</a> |
+        <a href="{% url 'App1_about' %}">About</a> |
+        <a href="{% url 'App1_contact' %}">Contact</a>
+    </nav>
+</body>
+</html>
+
+Step 5. Serve Media in Development
+
+📄 Sample_Project/urls.py    (Add this in last)
+from django.conf import settings
+from django.conf.urls.static import static
+
+# ✅ Serve media files during development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
