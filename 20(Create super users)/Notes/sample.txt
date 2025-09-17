@@ -28,7 +28,6 @@ A superuser has all permissions and can access the Django admin panel.
 Command:
 python manage.py createsuperuser
 
-
 Steps from your case:
 Username (leave blank to use 'jvrkr'): rk
 Email address: rk@gmail.com
