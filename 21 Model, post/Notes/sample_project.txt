@@ -39,6 +39,8 @@ A Django app is a component of your project that handles a specific feature (e.g
 
 Projects can have multiple apps, each with its own models, views, and templates.
 
+URL → View → Model → Template → Response
+
 📌 3. What is a Model?
 Theory:
     A model is a Python class that represents a database table.
