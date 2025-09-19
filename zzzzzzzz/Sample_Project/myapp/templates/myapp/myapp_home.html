@@ -1,0 +1,19 @@
+<html>
+<head>
+    <title>My Blog Posts</title>
+</head>
+<body bgcolor="red">
+    <h1>Blog Posts</h1>
+    {% block content %}
+    {% for i in posts %}
+         <h3>{{ i.title }}</h3>
+         <i>{{ i.created_at }}</i><br>
+         <b>By: {{ i.author }}</b>
+         <p>{{ i.content }}</p>
+         <hr>
+    {% empty %}
+         <p>No posts available.</p>
+    {% endfor %}
+    {% endblock content %}
+</body>
+</html>
