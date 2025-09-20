@@ -1,0 +1,93 @@
+Step1: 
+django-admin startproject sample_project
+cd sample_project
+python manage.py startapp myapp
+
+Register myapp in sample_project/settings.py:
+    INSTALLED_APPS = [
+        'myapp',
+    ]
+
+Step 2:
+File: myapp/models.py
+from django.db import models
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    author = models.CharField(max_length=50, default="Anonymous")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+Apply migrations:
+python manage.py makemigrations
+python manage.py migrate
+
+Step3:
+File: myapp/forms.py
+from django import forms
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'author']
+
+Step 4:
+File: myapp/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Post
+from .forms import PostForm
+
+# READ - List posts
+def post_list(request):
+    posts = Post.objects.all()
+    return render(request, 'myapp/post_list.html', {'posts': posts})
+
+Step 5:
+File: myapp/urls.py
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.post_list, name='post_list'),
+]
+
+Include app URLs in sample_project/urls.py:
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('myapp.urls')),
+]
+
+Step 6:
+Folder: myapp/templates/myapp/
+post_list.html
+<!DOCTYPE html>
+<html>
+<head><title>Posts</title></head>
+<body>
+    <h1>All Posts</h1>
+    <a href="{}">➕ Add New Post</a>
+    <hr>
+    {% for i in posts %}
+        <h3>{{ i.title }}</h3>
+        <p>{{ i.content }}</p>
+        <i>By {{ i.author }} | {{ i.created_at }}</i><br>
+        <a href="{}">✏ Edit</a> |
+        <a href="{}">🗑 Delete</a>
+        <hr>
+    {% empty %}
+        <p>No posts available.</p>
+    {% endfor %}
+</body>
+</html>
+
+Step 7. Run & Test
+    python manage.py runserver
+
+➡ Access URLs:
+    List posts → http://127.0.0.1:8000/
