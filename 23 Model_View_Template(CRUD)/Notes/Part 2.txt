@@ -1,0 +1,125 @@
+Perfect 👍 You’ve already completed Part 1 (setup, model, form, basic list view, and template).
+
+Now let’s write Part 2 → which extends the project into full CRUD (Create, Read, Update, Delete) functionality.
+
+📝 Part 2 – Extend CRUD in Django
+Step 1: Add Create, Update & Delete Views
+File: myapp/views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Post
+from .forms import PostForm
+
+# READ - List posts
+def post_list(request):
+    posts = Post.objects.all()
+    return render(request, 'myapp/post_list.html', {'posts': posts})
+
+# CREATE - Add new post
+def post_create(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('post_list')
+    else:
+        form = PostForm()
+    return render(request, 'myapp/post_form.html', {'form': form})
+
+# UPDATE - Edit post
+def post_update(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('post_list')
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'myapp/post_form.html', {'form': form})
+
+# DELETE - Remove post
+def post_delete(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        post.delete()
+        return redirect('post_list')
+    return render(request, 'myapp/post_confirm_delete.html', {'post': post})
+
+Step 2: Update URLs
+File: myapp/urls.py
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.post_list, name='post_list'),
+    path('create/', views.post_create, name='post_create'),
+    path('<int:pk>/edit/', views.post_update, name='post_update'),
+    path('<int:pk>/delete/', views.post_delete, name='post_delete'),
+]
+
+Step 3: Update Templates
+1. post_list.html
+
+<!DOCTYPE html>
+<html>
+<head><title>Posts</title></head>
+<body>
+    <h1>All Posts</h1>
+    <a href="{% url 'post_create' %}">➕ Add New Post</a>
+    <hr>
+    {% for post in posts %}
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.content }}</p>
+        <i>By {{ post.author }} | {{ post.created_at }}</i><br>
+        <a href="{% url 'post_update' post.pk %}">✏ Edit</a> |
+        <a href="{% url 'post_delete' post.pk %}">🗑 Delete</a>
+        <hr>
+    {% empty %}
+        <p>No posts available.</p>
+    {% endfor %}
+</body>
+</html>
+
+
+2. post_form.html
+<!DOCTYPE html>
+<html>
+<head><title>Post Form</title></head>
+<body>
+    <h1>{% if form.instance.pk %}Edit Post{% else %}New Post{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'post_list' %}">⬅ Back to Posts</a>
+</body>
+</html>
+
+
+3. post_confirm_delete.html
+<!DOCTYPE html>
+<html>
+<head><title>Delete Post</title></head>
+<body>
+    <h1>Delete Post</h1>
+    <p>Are you sure you want to delete "{{ post.title }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, Delete</button>
+    </form>
+    <a href="{% url 'post_list' %}">⬅ Cancel</a>
+</body>
+</html>
+
+Step 4: Run & Test
+Start the dev server:
+python manage.py runserver
+
+Now test the full CRUD flow:
+List posts → http://127.0.0.1:8000/
+Create post → http://127.0.0.1:8000/create/
+Edit post → http://127.0.0.1:8000/1/edit/
+Delete post → http://127.0.0.1:8000/1/delete/
