@@ -1,0 +1,18 @@
+<html>
+<head><title>Posts</title></head>
+<body>
+    <h1>All Posts</h1>
+    <a href="{% url 'post_create' %}">➕ Add New Post</a>
+    <hr>
+    {% for post in posts %}
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.content }}</p>
+        <i>By {{ post.author }} | {{ post.created_at }}</i><br>
+        <a href="{% url 'post_update' post.pk %}">✏ Edit</a> |
+        <a href="{% url 'post_delete' post.pk %}">🗑 Delete</a>
+        <hr>
+    {% empty %}
+        <p>No posts available.</p>
+    {% endfor %}
+</body>
+</html>

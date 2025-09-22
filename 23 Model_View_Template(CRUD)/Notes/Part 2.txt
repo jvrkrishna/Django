@@ -124,7 +124,7 @@ Create post → http://127.0.0.1:8000/create/
 Edit post → http://127.0.0.1:8000/1/edit/
 Delete post → http://127.0.0.1:8000/1/delete/
 
-
+******************************* Optional Part ******************************
 (Optional) Register in admin:
 File: myapp/admin.py
 from django.contrib import admin
@@ -136,3 +136,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('created_at', 'author')
 
 admin.site.register(Post, PostAdmin)
+
+****************************************************************************
+#To check create superuser
+py manage.py createsuperuser
