@@ -1,4 +1,3 @@
-Project No: 0011
 Project Name: Project --- blog
 Create users and authenticate users
 ***************************************************************
