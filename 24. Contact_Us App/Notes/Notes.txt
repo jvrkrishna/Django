@@ -41,7 +41,6 @@ urlpatterns = [
     path('', include('contact_us.urls')),
 ]
 
-
 7. Create app level urls.py and append the code
 from django.urls import path
 from .views import contactus,success
