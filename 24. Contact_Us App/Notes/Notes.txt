@@ -3,7 +3,9 @@ Create contact us page and save the data
 ***************************************************************
 >C:\Users\jvrkr\git_repo\Django_projects\0010>django-admin startproject Project
 
->C:\Users\jvrkr\git_repo\Django_projects\0010\Project>Django-admin startapp contact_us
+>C:\Users\jvrkr\git_repo\Django_projects\0010>cd Project
+
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py startapp contact_us
 
 #Modify settings.py
 1. add app name in installed apps
@@ -13,62 +15,63 @@ Create contact us page and save the data
 3. create templates folder
 >C:\Users\jvrkr\git_repo\Django_projects\0010\Project>mkdir templates
 
-4. create a file index.html and contact_us.html in templates folder.
+4. create a file contact_us.html and success.html in templates folder.
 
-5. Create index.html page
-<html>
-    <head>
-        <title>Home</title>
-    </head>
-    <body>
-        <h3>Hello</h3>
-    </body>
-</html>
-
-6. Now create views.py in app level
+5. Now create views.py in app level
 # Create your views here.
-
-def home(request):
-    return render(request,'index.html')
+from django.shortcuts import render, redirect
 
 def contactus(request):
-    return render(request,'contact_us.html')
+    if request.method == "POST":
+        # process form data here
+        # e.g., save to DB, send email, etc.
+        return redirect('success')   # redirect to success view (GET)
+    # GET -> show blank form
+    return render(request, 'contact_us.html')
 
-7. Modify project level urls.py
+def success(request):
+    return render(request, 'success.html')
+
+6. Modify project level urls.py
 from django.contrib import admin
 from django.urls import path,include
 
-from contact_us.views import home
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',home,name='home'),
-    path('contact_us/', include('contact_us.urls')),
+    path('', include('contact_us.urls')),
 ]
 
 
-8. Create app level urls.py and append the code
+7. Create app level urls.py and append the code
 from django.urls import path
-from .views import contactus
+from .views import contactus,success
 
 urlpatterns=[
-    path('',contactus,name='contact'),
+    path('',contactus,name='contactus'),
+    path('success/',success,name='success')
 ]
 
-9. makemirations, migrate, createsuperuser
->C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py makemigrations
-
->C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py migrate
-
+8. Createsuperuser
 C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py createsuperuser
 
-10. Now download or copy any contact us form from bootstrap code in contact_us.html.
+9. Now download or copy any contact us form from bootstrap code in contact_us.html
+from like----> https://web3forms.com/examples
 
-11. Now run this link http://127.0.0.1:8000/contact_us/
+10. Now run this link http://127.0.0.1:8000/
 
-12. Modify contact_us.html as per requirement and modify each element attrinbute name="name" like this all. 
+11. Modify contact_us.html as per requirement and modify each element attribute name="name" like this all. 
 Example:
 <input type="text" class="form-control" id="nam" name="name" placeholder="Enter name" required>
+
+#and Modify these below is very important
+{% load static %} ----> Add at top if any images
+
+<form class="contact-form" action="{% url 'contactus' %}" method="POST">
+
+{% csrf_token %} --->It is a Django template tag that inserts a hidden security token into any HTML form that sends data via POST, PUT, or DELETE requests.
+
+12. Create customised code for success.html 
+<a href="{% url 'contactus' %}" class="back-link">Go back</a> ----> This is for Go back link.
 
 13. Create models goto models.py and create models (Install this extention for auto code ---Djaneiro - Django Snippets)
 
@@ -106,23 +109,38 @@ admin.site.register(Contact)
 
 Go and verify model is created or not http://127.0.0.1:8000/admin/
 
-16. Now modify views (Model to views)
-from django.shortcuts import render
-from .models import Contact
-# Create your views here.
-
-def home(request):
-    return render(request,'index.html')
-
+16. Now modify view (Model to views)
+#Modify contactus method
 def contactus(request):
-    if request.method=='POST':
-        name=request.POST['name']
-        email=request.POST['email']
-        message=request.POST['msg']
-        print(name,email,message)
-        data=Contact(name=name,email=email,message=message)
-        data.save()
-    return render(request,'contact_us.html')
+    if request.method == 'POST':
+        # use .get with default '' to avoid KeyError
+        name = request.POST.get('name', '').strip()
+        email = request.POST.get('email', '').strip()
+        message = request.POST.get('message', '').strip()   # match your template's name attr ('message')
+
+        # Basic validation
+        errors = []
+        if not name:
+            errors.append("Name is required.")
+        if not email:
+            errors.append("Email is required.")
+        if not message:
+            errors.append("Message is required.")
+
+        if errors:
+            # re-render the form with entered values + errors
+            context = {'errors': errors, 'name': name, 'email': email, 'message': message}
+            return render(request, 'contact_us.html', context)
+
+        # Save to DB
+        contact = Contact(name=name, email=email, message=message)
+        contact.save()
+
+        # Redirect to a success page (Post/Redirect/Get)
+        return redirect('success')   # name of the success url pattern
+
+    # GET request, show blank form
+    return render(request, 'contact_us.html')
 
 17. Modify contact_us.html form action and add csrf token.
 <form action="" method="POST">{% csrf_token %}
