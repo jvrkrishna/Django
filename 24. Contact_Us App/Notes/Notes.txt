@@ -51,6 +51,8 @@ urlpatterns=[
 ]
 
 8. Createsuperuser
+C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py makemigrations
+C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py migrate
 C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py createsuperuser
 
 9. Now download or copy any contact us form from bootstrap code in contact_us.html
@@ -110,26 +112,13 @@ Go and verify model is created or not http://127.0.0.1:8000/admin/
 
 16. Now modify view (Model to views)
 #Modify contactus method
+from .models import Contact
 def contactus(request):
     if request.method == 'POST':
         # use .get with default '' to avoid KeyError
         name = request.POST.get('name', '').strip()
         email = request.POST.get('email', '').strip()
         message = request.POST.get('message', '').strip()   # match your template's name attr ('message')
-
-        # Basic validation
-        errors = []
-        if not name:
-            errors.append("Name is required.")
-        if not email:
-            errors.append("Email is required.")
-        if not message:
-            errors.append("Message is required.")
-
-        if errors:
-            # re-render the form with entered values + errors
-            context = {'errors': errors, 'name': name, 'email': email, 'message': message}
-            return render(request, 'contact_us.html', context)
 
         # Save to DB
         contact = Contact(name=name, email=email, message=message)
@@ -141,7 +130,4 @@ def contactus(request):
     # GET request, show blank form
     return render(request, 'contact_us.html')
 
-17. Modify contact_us.html form action and add csrf token.
-<form action="" method="POST">{% csrf_token %}
-
->py manage.py runserver
+>>>py manage.py runserver
