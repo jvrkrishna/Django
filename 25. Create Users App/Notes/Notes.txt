@@ -3,16 +3,17 @@ Create users and authenticate users
 ***************************************************************
 >C:\Users\jvrkr\git_repo\Django_projects\0010>django-admin startproject Project
 
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>cd Project
+
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py startapp blog
+
 #Modify settings.py accordingly
 #Modify settings.py
 1. add app name in installed apps
 
 2. Modify template dirs path ---'DIRS': [os.path.join(BASE_DIR,'templates')],
 
-3. create templates folder
->C:\Users\jvrkr\git_repo\Django_projects\0010\Project>mkdir templates
-
-4. makemirations, migrate, createsuperuser
+3. makemirations, migrate, createsuperuser
 >C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py makemigrations
 
 >C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py migrate
@@ -23,18 +24,26 @@ C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py runserver
 
 Go to link http://127.0.0.1:8000/admin/ and check user fields in admin
 
-create index.html and register.html
-index.html
+4. create templates folder
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>mkdir templates
+#create index.html, register.html, login.html
+#index.html
 <html>
     <head>
         <title>Home</title>
     </head>
     <body>
-        <h3>THIS IS HOME PAGE</h3>
+        <h3>HOME PAGE</h3>
+        <button type="button"><a href="{% url 'home' %}">HOME</a></button>
+        <button type="button"><a href="{% url 'register' %}">Register</a></button>
+        <button type="button"><a href="{% url 'login' %}">LOGIN</a></button>
+        <button type="button"><a href="{% url 'logout' %}">LOGOUT</a></button>
+
+       <h1><p align="right">{{request.user}}</p></h1>
     </body>
 </html>
 
-register.html
+#register.html
 <html>
     <head>
         <title>Home</title>
@@ -56,65 +65,7 @@ register.html
     </body>
 </html>
 
-5. Modify project level urls.py
-from django.contrib import admin
-from django.urls import path,include
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('blog.urls')),
-]
-
-6. Create app level urls.py and append the code
-from django.urls import path
-from .views import home,register
-
-urlpatterns=[
-    path('',home,name='home'),
-    path('register/',register,name='register'),
-]
-
-7. Now create views.py in app level
-from django.shortcuts import render,redirect
-from django.contrib.auth.models import User #Here we are using existing model not creating model
-
-# Create your views here.
-def home(request):
-    return render(request,'index.html')
-
-def register(request):
-    return render(request,'register.html')
-
-
->C:\Users\jvrkr\git_repo\Django_projects\0011\Project>py manage.py runserver
-
-8. To get data modify views.py
-from django.shortcuts import render,redirect
-from django.contrib.auth.models import User #Here we are using existing model not creating model
-
-# Create your views here.
-def home(request):
-    return render(request,'index.html')
-
-def register(request):
-    if request.method=='POST':
-        username=request.POST['username']
-        email=request.POST['email']
-        password=request.POST['password']
-        
-        user=User.objects.create_user(username=username,email=email,password=password)
-        user.save()
-        return redirect('home') #to redirect to home page after register.
-    return render(request,'register.html')
-
->C:\Users\jvrkr\git_repo\Django_projects\0011\Project>py manage.py runserver
-
-register the user in http://127.0.0.1:8000/register/ and register then check the admin page whether the user data is saved or not.
-
-***************************************************************
-User authentication , login and logout
-***************************************************************
-1. Create login.html in templates folder
+#login.html
 <html>
     <head>
         <title>Login</title>
@@ -130,7 +81,50 @@ User authentication , login and logout
     </body>
 </html>
 
-2. Add this in views.py
+5. Modify project level urls.py
+from django.contrib import admin
+from django.urls import path,include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('blog.urls')),
+]
+
+6. Now create views.py in app level
+from django.shortcuts import render,redirect
+from django.contrib.auth.models import User #Here we are using existing model not creating model
+
+# Create your views here.
+def home(request):
+    return render(request,'index.html')
+
+def register(request):
+    return render(request,'register.html')
+
+def login_user(request):
+    return render(request,'login.html')
+
+def logout_user(request):
+    return redirect('home')
+
+#To get data modify views.py
+# Create your views here.
+def register(request):
+    if request.method=='POST':
+        username=request.POST['username']
+        email=request.POST['email']
+        password=request.POST['password']
+        
+        user=User.objects.create_user(username=username,email=email,password=password)
+        user.save()
+        return redirect('home') #to redirect to home page after register.
+    return render(request,'register.html')
+
+>C:\Users\jvrkr\git_repo\Django_projects\0011\Project>py manage.py runserver
+
+register the user in http://127.0.0.1:8000/register/ and register then check the admin page whether the user data is saved or not.
+
+#Add this in views.py
 from django.contrib.auth import login,authenticate,logout
 def login_user(request):
     if request.method=='POST':
@@ -146,14 +140,7 @@ def login_user(request):
             return render(request,'login.html')
     return render(request,'login.html')
 
-def logout_user(request):
-    logout(request)
-    
-    return redirect('home')
-
-3. To know which user is logged in use {{request.user}} in home page.
-
-3. Modify app level urls.py
+7. Create app level urls.py and append the code
 from django.urls import path
 from .views import home,register,login_user,logout_user
 
@@ -164,18 +151,4 @@ urlpatterns=[
     path('logout/',logout_user,name='logout'),
 ]
 
-4. Create menu bar in Home page
-<html>
-    <head>
-        <title>Home</title>
-    </head>
-    <body>
-        <h3>HOME PAGE</h3>
-        <button type="button"><a href="{% url 'home' %}">HOME</a></button>
-        <button type="button"><a href="{% url 'register' %}">Register</a></button>
-        <button type="button"><a href="{% url 'login' %}">LOGIN</a></button>
-        <button type="button"><a href="{% url 'logout' %}">LOGOUT</a></button>
-
-       <h1><p align="right">{{request.user}}</p></h1>
-    </body>
-</html>
+>C:\Users\jvrkr\git_repo\Django_projects\0011\Project>py manage.py runserver
