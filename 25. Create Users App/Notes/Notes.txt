@@ -140,6 +140,11 @@ def login_user(request):
             return render(request,'login.html')
     return render(request,'login.html')
 
+#Modify this in view.py
+def logout_user(request):
+    logout(request)
+    return redirect('home')
+
 7. Create app level urls.py and append the code
 from django.urls import path
 from .views import home,register,login_user,logout_user
