@@ -9,42 +9,51 @@ Step 1: Create Django Project
 Step 2: Enter into the project 
         cd WelcomeProject 
 
+Step 3: Create templates folder and static folder in project level and modify settings.py accordingly.
 WelcomeProject/WelcomeProject/settings.py
 -----------------------------------------
-Setp 5: Define view function 
+#In Templates make a change in 'DIRS' path
+'DIRS': [os.path.join(BASE_DIR,'templates')],
 
-WelcomeProject/Wishapp/views.py 
--------------------------------
-from django.shortcuts import render,HttpResponse
+#In bottom make a change in Add below line for static files path
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
 
-# Create your views here.
-def wish_view(request):
-    return HttpResponse('Welcome to Django App')
+Step 4: Add image in static folder and add html file in templates folder
 
-def wish_me_view(request):
-    return HttpResponse('Hi Surendra Welcome to Django App')
+#In static folder add logo.png
 
-def thank_you_view(request):
-    return HttpResponse('Thank you for visit our Django App')
+#In templates folder add t1.html
+<b>Hello, {{name}}</b>
 
+#Method 1  ---->For Images
+{% load static %}
+<img src='{% static "logo.png" %}' alt="img not found">
 
-Step 6: Define url pattern
+#Method 2  ----->For images
+<img src="/static/logo.png" alt="img not found">
 
-WelcomeProject/WelcomeProject/urls.py
--------------------------------------
+Setp 5: Define view function -- add views.py and add content accordingly
+#Process 1: By using Httpresponse
+from django.shortcuts import HttpResponse
+def m1(request):
+    return HttpResponse("Hello, John")
+
+#Process 2: By using render
+from django.shortcuts import render
+def m1(request):
+    return render(request, 't1.html',{'name': 'John'})
+
+Step 6: Define url pattern -- add content in urls.py accordingly
 from django.contrib import admin
 from django.urls import path
-from Wishapp import views
+from .views import m1
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('wish/',views.wish_view),
-    path('wish_me/',views.wish_me_view),
-    path('thank_you/',views.thank_you_view),
+    path('',m1),
+    #path('extraurl/',m1)
 ]
 
 Step 7: Start developement server and send HTTP Request
 	Py manage.py runserver
 	
-	http://127.0.0.1:8000/wish/
-	http://127.0.0.1:8000/wish_me/
-	http://127.0.0.1:8000/thank_you/
+	http://127.0.0.1:8000/
