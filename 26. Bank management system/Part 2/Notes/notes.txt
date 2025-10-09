@@ -1,0 +1,104 @@
+#Add this below line in base.html
+<a href="{% url 'contactus' %}">CONTACTUS</a>
+
+#Inside app templates folder create contact_us.html and success.html
+
+#contact_us.html
+{% extends "base.html" %}
+
+{% block title %}
+<title>CONTACTUS - HIE TECH SOLUTIONS</title>
+{% endblock %}
+
+{%block content%}
+#Use the customised content for contact_us page
+<form class="contact-form" action="{% url 'contactus' %}" method="POST">
+    {% csrf_token %}
+
+{%endblock%}
+
+#success.html
+{% extends "base.html" %}
+
+{% block title %}
+<title>SUCCESS - HIE TECH SOLUTIONS</title>
+{% endblock %}
+
+{%block content%}
+#Use the customised content for Success page
+<a href="{% url 'contactus' %}" class="back-link">Go back</a>
+{% endblock %}
+
+#Add these in views.py
+from django.shortcuts import render,redirect
+def contactus(request):
+    if request.method == "POST":
+        # process form data here
+        # e.g., save to DB, send email, etc.
+        return redirect('success')   # redirect to success view (GET)
+    # GET -> show blank form
+    return render(request, 'contact_us.html')
+
+def success(request):
+    return render(request, 'success.html')
+
+#Add these in app level urls.py
+path('contactus/',views.contactus,name='contactus'),
+    path('success/',views.success,name='success')
+
+#Add these in app level models.py
+from django.db import models
+from datetime import datetime
+
+# Create your models here.
+class Contact(models.Model):
+    name=models.CharField(max_length=100)
+    email=models.EmailField(max_length=200)
+    message=models.TextField()
+    is_resolved=models.BooleanField(default=False)
+    created_at=models.DateTimeField(default=datetime.now)
+
+    class Meta:
+        verbose_name = 'Contact'
+        verbose_name_plural = 'Contacts'
+
+    def __str__(self):
+        return self.email
+
+#Register in admin.py
+from django.contrib import admin
+from .models import Contact
+# Register your models here.
+
+admin.site.register(Contact)
+
+#makemirations, migrate, runserver
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py makemigrations
+
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py migrate
+
+>C:\Users\jvrkr\git_repo\Django_projects\0010\Project>py manage.py runserver
+
+Go and verify model is created or not http://127.0.0.1:8000/admin/
+
+#Now modify views.py (Model to views)
+#Modify contactus method
+from .models import Contact
+def contactus(request):
+    if request.method == 'POST':
+        # use .get with default '' to avoid KeyError
+        name = request.POST.get('name', '').strip()
+        email = request.POST.get('email', '').strip()
+        message = request.POST.get('message', '').strip()   # match your template's name attr ('message')
+
+        # Save to DB
+        contact = Contact(name=name, email=email, message=message)
+        contact.save()
+
+        # Redirect to a success page (Post/Redirect/Get)
+        return redirect('success')   # name of the success url pattern
+
+    # GET request, show blank form
+    return render(request, 'contact_us.html')
+
+>>>py manage.py runserver
