@@ -1,0 +1,119 @@
+Project No: 0001
+Project Name: project (This project focus on only Project Level no App level)
+******************************************************
+>>> pip install Django
+
+Step 1: Create Django Project 
+	Django-admin startproject project
+
+Step 2: Enter into the project 
+        cd project 
+
+Step 3: Create templates folder and static folder in project level and modify settings.py accordingly.
+project/project/settings.py
+-----------------------------------------
+#In Templates make a change in 'DIRS' path
+'DIRS': [os.path.join(BASE_DIR,'templates')],
+
+#In bottom make a change in Add below line for static files path
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
+
+Step 4: Add image in static folder and add html file in templates folder
+
+#In static folder add logo.png
+
+#In templates folder add base.html
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'base' %}">HIE TECH SOLUTIONS</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'p1' %}">Page 1</a></li>
+      <li><a href="#">Page 2</a></li>
+      <li><a href="#">Page 3</a></li>
+    </ul>
+  </div>
+</nav>
+{%block content%}    
+{%endblock%}         
+</body>
+
+Setp 5: Define view function -- add views.py and add content accordingly
+from django.shortcuts import render
+def sample(request):
+    return render(request,"base.html")
+
+Step 6: Define url pattern -- add content in urls.py accordingly
+from django.contrib import admin
+from django.urls import path,include
+from .views import sample
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('',sample,name="base"),
+    path('',include("app1.urls"))
+]
+
+Step 7: Create an app and add in settings.py Installed Apps
+>py manage.py startapp app1
+
+#In settings.py Add these below
+INSTALLED_APPS = [
+    --------
+    --------
+    'app1',  #Add these app1 name
+]
+
+
+Step 8: In app1 views.py
+from django.shortcuts import render
+
+# Create your views here.
+def home(request):
+    return render(request,"at1.html")
+
+def page1(request):
+    return render(request,"at2.html")
+
+Step 9: In app1 urls.py
+from django.urls import path
+from .views import home,page1
+
+urlpatterns = [
+    path('home/',home,name="home"),
+    path('page1/',page1,name="p1")
+]
+
+Step 10: In app1 templates folder inside that at1.html and at2.html
+#at1.html
+{% extends "base.html" %}
+{%block content%}
+<b>Hello This is App1 Page Which is Home Page</b>
+{%endblock%}
+
+
+#at2.html
+{% extends "base.html" %}
+{%block content%}
+<b>Hello This is App1 Page Which is Page1</b>
+{%endblock%}
+
+
+Step 11: Start developement server and send HTTP Request
+	Py manage.py runserver
+	
+	http://127.0.0.1:8000/
+
+
