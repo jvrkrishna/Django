@@ -1,0 +1,159 @@
+#################App level Views.py##########################
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from .models import UserProfile
+# Register view
+def register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        password = request.POST['password']
+        gender = request.POST['gender']
+        dob = request.POST['dob']
+        address = request.POST['address']
+
+        # Create user and save to database
+        user = User.objects.create_user(username=username, email=email, password=password)
+        
+        # Now create and save the associated UserProfile
+        user_profile = UserProfile.objects.create(
+            user=user,
+            phone=phone,
+            gender=gender,
+            dob=dob,
+            address=address
+        )
+        
+        return redirect('home')  # Redirect to home page after registration
+
+    return render(request, 'register.html')
+
+
+# Login view
+from django.contrib import messages
+
+def My_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            # Adding a success message
+            messages.success(request, f"Congrats, {user.username}! You have successfully logged in.")
+            return redirect('welcome')  # Redirect to the 'welcome' page after login
+        else:
+            messages.error(request, 'Invalid credentials')
+            return render(request, 'login.html')  # Stay on login page with error
+
+    return render(request, 'login.html')
+
+# Logout view
+def logout_user(request):
+    logout(request) #Log out the current user
+    return redirect('home')  # Redirect to home page after logout
+
+def welcome_page(request):
+    return render(request, 'welcome.html')
+
+
+########################Models.py################################
+# UserProfile model to store additional information about a user
+from django.contrib.auth.models import User
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=15)
+    gender = models.CharField(max_length=10)
+    dob = models.DateField()
+    address = models.TextField()
+
+    def __str__(self):
+        return self.user.username
+
+################################Admin.py################################
+from .models import UserProfile
+admin.site.register(UserProfile)
+
+###################Add this in register.html and login.html##############
+<form method="POST">   #This is used to activate submit 
+    {% csrf_token %}
+
+
+###################Create welcome.html for My_login view ####################
+{% extends "base.html" %}
+
+{% block title %}
+<title>LoggedIn - HIE TECH SOLUTIONS</title>
+{% endblock %}
+
+{% load static %}
+
+{%block content%}
+<style>
+    /* static/css/styles.css */
+.container {
+    text-align: center;
+    padding: 50px;
+}
+
+.messages {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border-radius: 5px;
+}
+
+</style>
+
+<body>
+
+    <div class="container">
+        <h1>Welcome to Your Dashboard</h1>
+        
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <p>Enjoy exploring the site, {{ user.username }}!</p>
+    </div>
+</body>
+</html>
+{% endblock %}
+
+
+###########For modification of hiding when user logged in want to hide Login and Register buttons in base.html.
+{% block nav %}
+        <div id="nav-links">
+            {% if user.is_authenticated %}
+                <!-- If the user is logged in, show Logout -->
+                <a href="{% url 'logout' %}">LOGOUT</a>
+            {% else %}
+                <!-- If the user is not logged in, show Login and Register -->
+                <a href="{% url 'login' %}">LOGIN</a>
+                <a href="{% url 'register' %}">REGISTER</a>
+            {% endif %}
+            <a href="{% url 'contactus' %}">CONTACTUS</a>
+        </div>
+        {% endblock %}
+
+
+# After modifying the models, run:
+python manage.py makemigrations
+python manage.py migrate
+
+

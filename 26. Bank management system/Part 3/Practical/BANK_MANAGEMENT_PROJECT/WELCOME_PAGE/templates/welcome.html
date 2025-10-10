@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>LoggedIn - HIE TECH SOLUTIONS</title>
+{% endblock %}
+
+{% load static %}
+
+{%block content%}
+<style>
+    /* static/css/styles.css */
+.container {
+    text-align: center;
+    padding: 50px;
+}
+
+.messages {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border-radius: 5px;
+}
+
+</style>
+
+<body>
+
+    <div class="container">
+        <h1>Welcome to Your Dashboard</h1>
+        
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <p>Enjoy exploring the site, {{ user.username }}!</p>
+    </div>
+</body>
+</html>
+{% endblock %}

@@ -395,7 +395,7 @@ from django.shortcuts import render
 # Create your views here.
 def home(request):
     return render(request,'home.html')
-def login(request):
+def My_login(request):
     return render(request,'login.html')
 def register(request):
     return render(request,'register.html')
@@ -406,7 +406,7 @@ from . import views
 
 urlpatterns = [
     path('',views.home,name="home"),
-    path('login/',views.login , name="login"),
+    path('Mylogin/',views.My_login , name="login"),
     path('register/', views.register, name="register"),
 ]
 
