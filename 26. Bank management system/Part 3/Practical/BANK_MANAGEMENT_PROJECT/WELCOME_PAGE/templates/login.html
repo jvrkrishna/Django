@@ -106,7 +106,9 @@
         <table border="0">
             <tr>
                 <td><b>USER NAME :</b></td>
-                <td><input type="text" name="username" required></td>
+                <td> <input type="email" name="email" required
+               placeholder="you@example.com"
+               value="{{ email|default:'' }}"></td>
             </tr>
             <tr>
                 <td><b>PASSWORD :</b></td>

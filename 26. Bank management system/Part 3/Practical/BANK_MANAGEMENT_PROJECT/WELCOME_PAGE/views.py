@@ -33,62 +33,136 @@ def success(request):
     return render(request, 'success.html')
 
 
-
-
 ###################################################################
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
-from .models import UserProfile
 # Register view
+import random
+from django.contrib.auth.models import User
+from django.db import IntegrityError, transaction
+from django.contrib import messages
+from .models import UserProfile
+from django.views.decorators.csrf import csrf_protect
+
+def generate_12_digit_account():
+    # generates a random 12-digit string (leading digit won't be zero)
+    return str(random.randint(10**11, 10**12 - 1))
+
+@csrf_protect
 def register(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        phone = request.POST['phone']
-        email = request.POST['email']
-        password = request.POST['password']
-        gender = request.POST['gender']
-        dob = request.POST['dob']
-        address = request.POST['address']
+        # collect form data
+        first_name = request.POST.get('first_name', '').strip()
+        last_name = request.POST.get('last_name', '').strip()
+        email = request.POST.get('email', '').strip()
+        account_type = request.POST.get('account_type', '').strip()
+        gender = request.POST.get('gender', '').strip()
+        dob = request.POST.get('dob', '').strip()
+        password = request.POST.get('password', '')
+        password2 = request.POST.get('password2', '')
+        address = request.POST.get('address', '').strip()
+        city = request.POST.get('city', '').strip()
+        postal_code = request.POST.get('postal_code', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        username = email
 
-        # Create user and save to database
-        user = User.objects.create_user(username=username, email=email, password=password)
-        
-        # Now create and save the associated UserProfile
-        user_profile = UserProfile.objects.create(
-            user=user,
-            phone=phone,
-            gender=gender,
-            dob=dob,
-            address=address
-        )
-        
-        return redirect('home')  # Redirect to home page after registration
+        # simple validation
+        context = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'email': email,
+            'account_type': account_type,
+            'gender': gender,
+            'dob': dob,
+            'address': address,
+            'city': city,
+            'postal_code': postal_code,
+            'phone': phone,
+        }
 
+        if not all([first_name, last_name, email, account_type, gender, dob, password, password2, address, city, postal_code, phone]):
+            context['error'] = "Please fill in all the required fields."
+            return render(request, 'register.html', context)
+
+        if password != password2:
+            context['error'] = "Passwords do not match."
+            return render(request, 'register.html', context)
+
+        if User.objects.filter(email=email).exists():
+            context['error'] = "An account with this email already exists."
+            return render(request, 'register.html', context)
+
+        # create user and profile atomically
+        try:
+            with transaction.atomic():
+                # ensure username uniqueness; append numbers if necessary
+                base_username = username or email.split('@')[0]
+                final_username = base_username
+                counter = 1
+                while User.objects.filter(username=final_username).exists():
+                    final_username = f"{base_username}{counter}"
+                    counter += 1
+
+                user = User.objects.create_user(
+                    username=final_username,
+                    email=email,
+                    password=password,
+                    first_name=first_name,
+                    last_name=last_name
+                )
+
+                # generate unique account number
+                acct = generate_12_digit_account()
+                while UserProfile.objects.filter(account_number=acct).exists():
+                    acct = generate_12_digit_account()
+
+                profile = UserProfile.objects.create(
+                    user=user,
+                    phone=phone,
+                    gender=gender,
+                    dob=dob,
+                    address=address,
+                    city=city,
+                    postal_code=postal_code,
+                    account_type=account_type,
+                    account_number=acct
+                )
+        except IntegrityError:
+            context['error'] = "Something went wrong while creating your account. Please try again."
+            return render(request, 'register.html', context)
+
+        # success — render template with success message and account number so JS can show popup
+        context['success'] = True
+        context['account_number'] = profile.account_number
+        return render(request, 'register.html', context)
+
+    # GET
     return render(request, 'register.html')
 
 
 # Login view
+from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.shortcuts import render, redirect
 
 def My_login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        email = request.POST.get('email', '').strip().lower()
+        password = request.POST.get('password', '')
 
-        user = authenticate(username=username, password=password)
+        user = authenticate(request, username=email, password=password)
 
         if user is not None:
             login(request, user)
-            # Adding a success message
-            messages.success(request, f"Congrats, {user.username}! You have successfully logged in.")
-            return redirect('welcome')  # Redirect to the 'welcome' page after login
+            messages.success(request, f"Welcome, {user.first_name or user.username}!")
+            return redirect('welcome')
         else:
-            messages.error(request, 'Invalid credentials')
-            return render(request, 'login.html')  # Stay on login page with error
+            messages.error(request, 'Invalid email or password')
+            return render(request, 'login.html', {'email': email})
 
     return render(request, 'login.html')
 
+
 # Logout view
+from django.contrib.auth import logout
 def logout_user(request):
     logout(request) #Log out the current user
     return redirect('home')  # Redirect to home page after logout

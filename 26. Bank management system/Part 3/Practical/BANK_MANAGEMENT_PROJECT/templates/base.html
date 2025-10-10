@@ -15,6 +15,9 @@
             --cta: #ffb040;
             --muted: #6b7280;
             --bg: #ffffff;
+
+            /* default/fallback header height (will be overridden by JS) */
+            --header-height: 140px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,13 +29,19 @@
             overflow-x: hidden;
         }
 
+        /* Ensure the page content clears the header */
+        .page-content {
+            /* padding-top uses computed header height plus small breathing room */
+            padding-top: calc(var(--header-height) + 1rem);
+        }
+
         /* ===== HEADER ===== */
         header.site-header {
             width: 100%;
-            position: absolute;
+            position: absolute; /* header is positioned above page flow */
             top: 0;
             left: 0;
-            padding: 35px 80px 40px; /* Added bottom padding for spacing */
+            padding: 35px 80px 4px; /* Added bottom padding for spacing within header */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -98,7 +107,7 @@
             align-items: center;
             padding: 0 80px;
             background: linear-gradient(180deg, #ffffff 0%, #f9f8ff 100%);
-            margin-top: 140px; /* Adds space between header and hero */
+            margin-top: 1px; /* Provides extra space below header for the hero; can stay */
         }
 
         .hero-inner {
@@ -215,6 +224,8 @@
                 font-size: 16px;
                 padding: 10px 20px;
             }
+            /* small screens: reduce default header fallback */
+            :root { --header-height: 120px; }
         }
     </style>
 </head>
@@ -239,34 +250,56 @@
         {% endblock %}
     </header>
 
-{% block content %}
-    <!-- Hero Section -->
-    <section class="hero-full">
-        <div class="hero-inner">
-            <!-- Left Content -->
-            <div class="hero-left">
-                <div class="eyebrow">ONLINE</div>
-                <h2 class="hero-title">
-                    <span>ONLINE</span>
-                    <span>BANKING</span>
-                </h2>
-                <p class="hero-desc">
-                    Duis elit justo, dignissim in efficitur sit amet, finibus eget arcu. Duis quis felis in nunc auctor commodo ac vel elit.
-                    Suspendisse risus nisl, iaculis ac risus et ultrices semper urna. Sed tincidunt, dolor nec auctor.
-                </p>
-                <div class="cta-row">
-                    <a class="btn-cta" href="#">Learn more</a>
-                </div>
-            </div>
+    <!-- wrap content so it will be pushed down by .page-content padding -->
+    <main class="page-content">
+        {% block content %}
+            <!-- Hero Section (default content) -->
+            <section class="hero-full">
+                <div class="hero-inner">
+                    <!-- Left Content -->
+                    <div class="hero-left">
+                        <div class="eyebrow">ONLINE</div>
+                        <h2 class="hero-title">
+                            <span>ONLINE</span>
+                            <span>BANKING</span>
+                        </h2>
+                        <p class="hero-desc">
+                            Duis elit justo, dignissim in efficitur sit amet, finibus eget arcu. Duis quis felis in nunc auctor commodo ac vel elit.
+                            Suspendisse risus nisl, iaculis ac risus et ultrices semper urna. Sed tincidunt, dolor nec auctor.
+                        </p>
+                        <div class="cta-row">
+                            <a class="btn-cta" href="#">Learn more</a>
+                        </div>
+                    </div>
 
-            <!-- Right Illustration -->
-            <div class="hero-right">
-                <div class="hero-card">
-                    <img src="{% static 'images/hero.png' %}" alt="Online banking illustration">
+                    <!-- Right Illustration -->
+                    <div class="hero-right">
+                        <div class="hero-card">
+                            <img src="{% static 'images/hero.png' %}" alt="Online banking illustration">
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
-{% endblock %}
+            </section>
+        {% endblock %}
+    </main>
+
+    <!-- JS to compute actual header height and set CSS variable -->
+    <script>
+      (function (){
+        function updateHeaderHeight() {
+          const header = document.querySelector('header.site-header');
+          if (!header) return;
+          const rect = header.getBoundingClientRect();
+          // set CSS variable to header height in px
+          document.documentElement.style.setProperty('--header-height', Math.ceil(rect.height) + 'px');
+        }
+
+        // Run on initial load and when layout might change
+        window.addEventListener('load', updateHeaderHeight);
+        window.addEventListener('DOMContentLoaded', updateHeaderHeight);
+        window.addEventListener('resize', updateHeaderHeight);
+        // If you dynamically change header content, call updateHeaderHeight() after changes
+      })();
+    </script>
 </body>
 </html>

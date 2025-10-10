@@ -6,18 +6,22 @@
 
 {% load static %}
 
-{%block content%}
+{% block content %}
   <style>
     body {
       background-color: #0b1221;
       color: #d1d5db;
       font-family: 'Inter', Arial, sans-serif;
+      margin: 0;
+      text-align: center;
+    }
+
+    .content-wrapper {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      margin: 0;
-      text-align: center;
+      margin-top: 6rem; /* 👈 adds space below header */
     }
 
     .success-icon {
@@ -29,7 +33,6 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 1.5rem;
-      margin-top: 5rem;
     }
 
     .success-icon svg {
@@ -69,22 +72,19 @@
       color: #0b1221;
     }
   </style>
-<body>
 
-  <div class="success-icon">
-    <!-- Green checkmark SVG -->
-    <svg viewBox="0 0 24 24">
-      <path d="M5 13l4 4L19 7" />
-    </svg>
+  <div class="content-wrapper">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+
+    <div class="success-message">Form submitted successfully!</div>
+    <div class="success-description">
+      Thank you! The form has been submitted successfully.<br>
+      We will reply to you soon!
+    </div>
+    <a href="{% url 'contactus' %}" class="back-link">Go back</a>
   </div>
-
-  <div class="success-message">Form submitted successfully!</div>
-  <div class="success-description">
-    Thank you! The form has been submitted successfully.<br>
-    We will reply to you soon!
-  </div>
-
-  <a href="{% url 'contactus' %}" class="back-link">Go back</a>
-
-</body>
 {% endblock %}

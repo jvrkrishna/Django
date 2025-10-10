@@ -14,9 +14,6 @@
     padding: 50px;
 }
 
-.messages {
-    margin-bottom: 20px;
-}
 
 .alert {
     padding: 15px;
@@ -32,18 +29,9 @@
 
     <div class="container">
         <h1>Welcome to Your Dashboard</h1>
-        
-        {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                    <div class="alert alert-success">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        
-        <p>Enjoy exploring the site, {{ user.username }}!</p>
+        <div class="alert">     
+        <p>Enjoy exploring the site, {{ user.first_name }} {{ user.last_name }}!</p>
+        </div>
     </div>
 </body>
 </html>
