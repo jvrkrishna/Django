@@ -1,19 +1,25 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 
-{%block title%}
-<title>Login-HIE TECH SOLUTIONS</title>
-{%endblock%}
+{% block title %}
+<title>Login - HIE TECH SOLUTIONS</title>
+{% endblock %}
 
-{%block content%}
+{% block content %}
 <style>
+    /* Add space below header */
+    form {
+        margin-top: 180px; /* ✅ Creates gap between header and form */
+    }
+
     fieldset {
-        width: 400px;                
-        margin: 100px auto;          
-        padding: 20px;               
-        text-align: center;           
-        border: 2px solid #4d36c0;  
-        border-radius: 10px;        
+        width: 400px;
+        margin: 100px auto;
+        padding: 20px;
+        text-align: center;
+        border: 2px solid #4d36c0;
+        border-radius: 10px;
         background-color: #f9f9fc;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     }
 
     legend {
@@ -83,6 +89,13 @@
         padding-top: 10px;
         font-size: 13px;
     }
+
+    center {
+        display: block;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #444;
+    }
 </style>
 
 <form method="POST">
@@ -107,11 +120,12 @@
             </tr>
             <tr>
                 <td colspan="2" class="footer-text">
-                   <b> are you registered ??? <a href="{% url 'register' %}">Register</a></b>
+                    <b>Are you registered??? <a href="{% url 'register' %}">Register</a></b>
                 </td>
             </tr>
         </table>
     </fieldset>
 </form>
+
 <center>Note: Click on Logo to go to Home page.</center>
-{%endblock%}
+{% endblock %}

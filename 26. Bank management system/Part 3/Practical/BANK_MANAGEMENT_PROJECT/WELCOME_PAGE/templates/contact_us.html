@@ -4,117 +4,147 @@
 <title>CONTACTUS - HIE TECH SOLUTIONS</title>
 {% endblock %}
 
-
-<!-- Contact 6 - Bootstrap Brain Component -->
 {% load static %}
 
-{%block content%}
+{% block content %}
 <style>
-.contact-section {
-  width: 100%;
-  max-width: 40rem;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 3rem 1rem;
-}
+  /* Add space between header and content */
+  body {
+    background-color: #ffffff;
+  }
 
-.contact-intro > * + * {
-  margin-top: 1rem;
-}
+  .contact-section {
+    width: 100%;
+    max-width: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3rem 1rem;
+    margin-top: 80px; /* ✅ adds space below header */
+  }
 
-.contact-title {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-  font-weight: 700;
-}
+  fieldset {
+    width: 700px;
+    margin: 50px auto; /* adjusted for better layout */
+    padding: 30px;
+    text-align: center;
+    border: 2px solid #4d36c0;
+    border-radius: 10px;
+    background-color: #f9f9fc;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
 
-.contact-description {
-  color: rgb(107 114 128);
-}
+  legend {
+    font-weight: bold;
+    font-size: 22px;
+    color: goldenrod;
+    font-family: Arial, sans-serif;
+  }
 
-.form-group-container {
-  display: grid;
-  gap: 1rem;
-  margin-top: 2rem;
-}
+  .contact-intro > * + * {
+    margin-top: 1rem;
+  }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
+  .contact-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3124ca;
+  }
 
-.form-label {
-  margin-bottom: 0.5rem;
-}
+  .contact-description {
+    color: rgb(107 114 128);
+  }
 
-.form-input,
-.form-textarea {
-  padding: 0.5rem;
-  border: 1px solid #e5e7eb;
-  display: flex;
-  height: 2.5rem;
-  width: 100%;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
+  .form-group-container {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
 
-.form-input::placeholder,
-.form-textarea:focus-visible {
-  color: #6b7280;
-}
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
 
-.form-input:focus-visible,
-.form-textarea:focus-visible {
-  outline: 2px solid #2563eb;
-  outline-offset: 2px;
-}
+  .form-label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
 
-.form-textarea {
-  min-height: 120px;
-}
+  .form-input,
+  .form-textarea {
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    font-size: 0.9rem;
+    line-height: 1.4rem;
+  }
 
-.form-submit {
-  width: 100%;
-  margin-top: 1.2rem;
-  background-color: #3124ca;
-  color: #fff;
-  padding: 13px 5px;
-  border-radius: 0.375rem;
-}
+  .form-input::placeholder,
+  .form-textarea::placeholder {
+    color: #9ca3af;
+  }
 
+  .form-input:focus-visible,
+  .form-textarea:focus-visible {
+    outline: 2px solid #3124ca;
+    outline-offset: 2px;
+  }
+
+  .form-textarea {
+    min-height: 120px;
+  }
+
+  .form-submit {
+    width: 100%;
+    margin-top: 1.2rem;
+    background-color: #3124ca;
+    color: #fff;
+    padding: 14px 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-submit:hover {
+    background-color: #20189e;
+    transform: translateY(-2px);
+  }
 </style>
+
 <section class="contact-section">
-  <div class="contact-intro">
-    <h2 class="contact-title">Get in Touch</h2>
-    <p class="contact-description">
-      Fill out the form below and we'll get back to you as soon as possible.
-    </p>
-  </div>
+  <fieldset>
+    <legend>CONTACT US</legend>
+    <div class="contact-intro">
+      <h2 class="contact-title">Get in Touch</h2>
+      <p class="contact-description">
+        Fill out the form below and we'll get back to you as soon as possible.
+      </p>
+    </div>
 
     <form class="contact-form" action="{% url 'contactus' %}" method="POST">
-    {% csrf_token %}
-
-    <div class="form-group-container">
-      <div class="form-group">
-        <label for="name" class="form-label">Name</label>
-        <input id="name" name="name" class="form-input" placeholder="Your name" type="text" />
+      {% csrf_token %}
+      <div class="form-group-container">
+        <div class="form-group">
+          <label for="name" class="form-label">Name</label>
+          <input id="name" name="name" class="form-input" placeholder="Your name" type="text" />
+        </div>
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <input id="email" name="email" class="form-input" placeholder="Your email" type="email" />
+        </div>
+        <div class="form-group">
+          <label for="phone" class="form-label">Phone</label>
+          <input id="phone" name="phone" class="form-input" placeholder="+91 " type="text" />
+        </div>
+        <div class="form-group">
+          <label for="message" class="form-label">Message</label>
+          <textarea class="form-textarea" id="message" name="message" placeholder="Your message"></textarea>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="email" class="form-label">Email</label>
-        <input id="email" name="email" class="form-input" placeholder="Your email" type="email" />
-      </div>
-      <div class="form-group">
-        <label for="phone" class="form-label">Phone</label>
-        <input id="phone" name="phone" class="form-input" placeholder="+91 " type="text" />
-      </div>
-      <div class="form-group">
-        <label for="message" class="form-label">Message</label>
-        <textarea class="form-textarea" id="message" name="message" placeholder="Your message"></textarea>
-      </div>
-    </div>
-    <button class="form-submit" type="submit">Send Message</button>
-  </form>
-
+      <button class="form-submit" type="submit">Send Message</button>
+    </form>
+  </fieldset>
 </section>
-{%endblock%}
+{% endblock %}
