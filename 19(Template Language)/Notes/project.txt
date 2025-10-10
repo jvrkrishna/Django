@@ -1,5 +1,4 @@
-Project No: 0001
-Project Name: project (This project focus on only Project Level no App level)
+Project Name: project 
 ******************************************************
 >>> pip install Django
 
