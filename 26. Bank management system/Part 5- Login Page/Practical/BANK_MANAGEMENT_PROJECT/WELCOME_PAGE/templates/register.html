@@ -1,0 +1,155 @@
+{%extends "base.html"%}
+
+{%block title%}
+<title>Register-HIE TECH SOLUTIONS</title>
+{%endblock%}
+{% block content %}
+<style>
+    /* Custom styles for the form */
+    form {
+        margin-top: 180px;
+    }
+    fieldset {
+        width: 520px;
+        margin: 50px auto;
+        padding: 20px;
+        text-align: center;
+        border: 2px solid #4d36c0;
+        border-radius: 10px;
+        background-color: #f9f9fc;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    legend {
+        font-weight: bold;
+        font-size: 20px;
+        color: goldenrod;
+    }
+    table {
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+    td { padding: 8px; vertical-align: middle; }
+    td:first-child { text-align: right; font-weight: bold; width: 180px; }
+    input[type="text"], input[type="tel"], input[type="email"], input[type="password"], input[type="date"], textarea, select {
+        width: 240px;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+    textarea { resize: none; height: 60px; }
+    label { font-size: 13px; margin-right: 8px; }
+    button { color: white; background-color: #4d36c0; font-family: Arial, sans-serif; font-size: 16px; font-weight: bolder; padding: 8px 20px; border-radius: 20px; border: none; cursor: pointer; }
+    button:hover { background-color: #37279c; }
+    button[type="reset"] { margin-left: 10px; }
+    a { color: #4d36c0; text-decoration: none; font-weight: bold; margin-left: 5px; }
+    a:hover { text-decoration: underline; }
+    .footer-text { text-align: center; padding-top: 10px; font-size: 13px; font-weight: bold; }
+    .error { color: #b00020; margin-bottom: 10px; font-weight: bold; }
+    .messages {
+        margin-bottom: 20px;
+    }
+    .messages .success {
+        color: green;
+    }
+    .messages .error {
+        color: red;
+    }
+</style>
+
+<form method="POST">
+    {% csrf_token %}
+    <fieldset>
+        <legend>REGISTER</legend>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <table border="0">
+            <tr>
+                <td>First Name :</td>
+                <td><input type="text" name="first_name" value="{{ first_name|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Last Name :</td>
+                <td><input type="text" name="last_name" value="{{ last_name|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Email :</td>
+                <td><input type="email" name="email" value="{{ email|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Account Type :</td>
+                <td>
+                    <select name="account_type" required>
+                        <option value="">-- Select --</option>
+                        <option value="savings" {% if account_type == 'savings' %}selected{% endif %}>Savings</option>
+                        <option value="current" {% if account_type == 'current' %}selected{% endif %}>Current</option>
+                        <option value="salary" {% if account_type == 'salary' %}selected{% endif %}>Salary</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Gender :</td>
+                <td>
+                    <label><input type="radio" name="gender" value="male" {% if gender == 'male' %}checked{% endif %} required> Male</label>
+                    <label><input type="radio" name="gender" value="female" {% if gender == 'female' %}checked{% endif %}> Female</label>
+                    <label><input type="radio" name="gender" value="other" {% if gender == 'other' %}checked{% endif %}> Other</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Birth Date :</td>
+                <td><input type="date" name="dob" value="{{ dob|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Password :</td>
+                <td><input type="password" name="password" required></td>
+            </tr>
+            <tr>
+                <td>Confirm Password :</td>
+                <td><input type="password" name="password2" required></td>
+            </tr>
+            <tr>
+                <td>Address :</td>
+                <td><textarea name="address" required>{{ address|default:'' }}</textarea></td>
+            </tr>
+            <tr>
+                <td>City :</td>
+                <td><input type="text" name="city" value="{{ city|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Postal Code :</td>
+                <td><input type="text" name="postal_code" value="{{ postal_code|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Phone No :</td>
+                <td><input type="tel" name="phone" value="{{ phone|default:'' }}" required></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" style="text-align:center; padding-top:15px;">
+                    <button type="submit">REGISTER</button>
+                    <button type="reset">CANCEL</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="footer-text">
+                    already registered!!! <a href="{% url 'login' %}">Login</a>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+
+<center>Note: Click on Logo to go to Home page.</center>
+{% endblock %}

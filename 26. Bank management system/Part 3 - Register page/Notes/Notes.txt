@@ -1,0 +1,304 @@
+Now we are continue from Part2
+In this we are mainly focusing on Register page if we click on the Register link the fileds are open to fill. Fill all these fields and submit it they will save using models. If successfully submitted a pop up message will appear on screen with auto generated account number. The username is the mail id.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+1. Create register.html as per requirement
+Major Modification:
+<form method="POST" novalidate>
+    {% csrf_token %}
+------------------------------------------------------------------------------
+{% extends "base.html" %}
+
+{% block title %}
+<title>Register - HIE TECH SOLUTIONS</title>
+{% endblock %}
+
+{% block content %}
+<style>
+    /* Custom styles for the form */
+    form {
+        margin-top: 180px;
+    }
+    fieldset {
+        width: 520px;
+        margin: 50px auto;
+        padding: 20px;
+        text-align: center;
+        border: 2px solid #4d36c0;
+        border-radius: 10px;
+        background-color: #f9f9fc;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    legend {
+        font-weight: bold;
+        font-size: 20px;
+        color: goldenrod;
+    }
+    table {
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+    td { padding: 8px; vertical-align: middle; }
+    td:first-child { text-align: right; font-weight: bold; width: 180px; }
+    input[type="text"], input[type="tel"], input[type="email"], input[type="password"], input[type="date"], textarea, select {
+        width: 240px;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+    textarea { resize: none; height: 60px; }
+    label { font-size: 13px; margin-right: 8px; }
+    button { color: white; background-color: #4d36c0; font-family: Arial, sans-serif; font-size: 16px; font-weight: bolder; padding: 8px 20px; border-radius: 20px; border: none; cursor: pointer; }
+    button:hover { background-color: #37279c; }
+    button[type="reset"] { margin-left: 10px; }
+    a { color: #4d36c0; text-decoration: none; font-weight: bold; margin-left: 5px; }
+    a:hover { text-decoration: underline; }
+    .footer-text { text-align: center; padding-top: 10px; font-size: 13px; font-weight: bold; }
+    .error { color: #b00020; margin-bottom: 10px; font-weight: bold; }
+    .messages {
+        margin-bottom: 20px;
+    }
+    .messages .success {
+        color: green;
+    }
+    .messages .error {
+        color: red;
+    }
+</style>
+
+<form method="POST">
+    {% csrf_token %}
+    <fieldset>
+        <legend>REGISTER</legend>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <table border="0">
+            <tr>
+                <td>First Name :</td>
+                <td><input type="text" name="first_name" value="{{ first_name|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Last Name :</td>
+                <td><input type="text" name="last_name" value="{{ last_name|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Email :</td>
+                <td><input type="email" name="email" value="{{ email|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Account Type :</td>
+                <td>
+                    <select name="account_type" required>
+                        <option value="">-- Select --</option>
+                        <option value="savings" {% if account_type == 'savings' %}selected{% endif %}>Savings</option>
+                        <option value="current" {% if account_type == 'current' %}selected{% endif %}>Current</option>
+                        <option value="salary" {% if account_type == 'salary' %}selected{% endif %}>Salary</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Gender :</td>
+                <td>
+                    <label><input type="radio" name="gender" value="male" {% if gender == 'male' %}checked{% endif %} required> Male</label>
+                    <label><input type="radio" name="gender" value="female" {% if gender == 'female' %}checked{% endif %}> Female</label>
+                    <label><input type="radio" name="gender" value="other" {% if gender == 'other' %}checked{% endif %}> Other</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Birth Date :</td>
+                <td><input type="date" name="dob" value="{{ dob|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Password :</td>
+                <td><input type="password" name="password" required></td>
+            </tr>
+            <tr>
+                <td>Confirm Password :</td>
+                <td><input type="password" name="password2" required></td>
+            </tr>
+            <tr>
+                <td>Address :</td>
+                <td><textarea name="address" required>{{ address|default:'' }}</textarea></td>
+            </tr>
+            <tr>
+                <td>City :</td>
+                <td><input type="text" name="city" value="{{ city|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Postal Code :</td>
+                <td><input type="text" name="postal_code" value="{{ postal_code|default:'' }}" required></td>
+            </tr>
+            <tr>
+                <td>Phone No :</td>
+                <td><input type="tel" name="phone" value="{{ phone|default:'' }}" required></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" style="text-align:center; padding-top:15px;">
+                    <button type="submit">REGISTER</button>
+                    <button type="reset">CANCEL</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="footer-text">
+                    already registered!!! <a href="{% url 'login' %}">Login</a>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+
+<center>Note: Click on Logo to go to Home page.</center>
+{% endblock %}
+______________________________________________________________________________
+#2. Create UserProfile Model for register data in app level models.py
+from django.contrib.auth.models import User
+from django.db import models
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=15)
+    gender = models.CharField(max_length=10)
+    dob = models.DateField()
+    address = models.TextField()
+    account_number = models.CharField(max_length=12, unique=True, blank=True)
+
+    def __str__(self):
+        return self.user.username
+
+# After modifying the models, run:
+python manage.py makemigrations
+python manage.py migrate
+______________________________________________________________________________
+#3. After creating model Register in admin.py to view in admin panel
+from .models import UserProfile
+admin.site.register(UserProfile)
+______________________________________________________________________________
+#4. Modify register method in views.py(App level)
+# Import necessary modules
+from django.shortcuts import render  # For rendering templates
+from django.contrib.auth.models import User  # For handling the built-in User model
+from django.contrib import messages  # For displaying success or error messages
+from .models import UserProfile  # Custom UserProfile model to store extra user information
+import secrets  # For cryptographically secure random number generation
+import string  # Provides the string constant 'digits' (0-9)
+
+# Function to generate a unique 12-digit account number
+def _generate_12_digit_account_number():
+    digits = string.digits  # This will give us '0123456789', the digits to choose from
+    while True:  # Infinite loop to keep generating account numbers until we find a unique one
+        # Generate a 12-digit account number by choosing randomly from the available digits
+        acct = ''.join(secrets.choice(digits) for _ in range(12))
+        # Check if the account number already exists in the UserProfile table
+        if not UserProfile.objects.filter(account_number=acct).exists():
+            return acct  # Return the account number if it's unique
+
+# The main register view function for handling user registration
+def register(request):
+    if request.method == 'POST':  # Check if the form was submitted (POST request)
+        # Extract form data and strip any extra spaces
+        first_name = request.POST.get('first_name', '').strip()  # First name input
+        last_name = request.POST.get('last_name', '').strip()  # Last name input
+        email = request.POST.get('email', '').strip()  # Email input
+        account_type = request.POST.get('account_type')  # Account type (e.g., basic, premium)
+        gender = request.POST.get('gender')  # Gender input
+        dob = request.POST.get('dob')  # Date of birth input
+        password = request.POST.get('password')  # Password input
+        password2 = request.POST.get('password2')  # Password confirmation input
+        address = request.POST.get('address', '').strip()  # Address input
+        city = request.POST.get('city', '').strip()  # City input
+        postal_code = request.POST.get('postal_code', '').strip()  # Postal code input
+        phone = request.POST.get('phone', '').strip()  # Phone number input
+
+        # Validation: Check if passwords match
+        if password != password2:
+            messages.error(request, "Passwords do not match.")  # Display error if passwords don't match
+            # Return the user back to the registration form with the previously entered data
+            return render(request, 'register.html', {
+                'first_name': first_name, 'last_name': last_name, 'email': email,
+                'account_type': account_type, 'gender': gender, 'dob': dob,
+                'address': address, 'city': city, 'postal_code': postal_code, 'phone': phone
+            })
+
+        # Validation: Check if email already exists in the system
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists.")  # Display error if email is taken
+            # Return the user back to the form with the previously entered data
+            return render(request, 'register.html', {
+                'first_name': first_name, 'last_name': last_name, 'email': email,'account_type': account_type, 'gender': gender, 'dob': dob,
+                'address': address, 'city': city, 'postal_code': postal_code, 'phone': phone
+            })
+
+        # If all validations pass, create the user in the User model
+        user = User.objects.create_user(username=email, email=email, password=password,first_name=first_name, last_name=last_name)
+        user.save()  # Save the new user to the database
+
+        # Generate a unique 12-digit account number for the user
+        account_number = _generate_12_digit_account_number()
+
+        # Create a UserProfile and link it to the newly created user
+        UserProfile.objects.create(
+            user=user,  # Link the profile to the user object
+            phone=phone,  # Save the user's phone number
+            gender=gender,  # Save the user's gender
+            dob=dob,  # Save the user's date of birth
+            address=address,  # Save the user's address
+            account_number=account_number  # Save the generated unique account number
+        )
+
+        # Display success message after account creation
+        messages.success(request, "Account created successfully!")
+
+        # Return the user back to the registration form with success information
+        return render(request, 'register.html')
+
+    # If it's a GET request (i.e., when the page is first accessed), show the registration form
+    return render(request, 'register.html')
+______________________________________________________________________________
+#5 After Successfull registration i need some message so I we need to Configure Django Messages (in settings.py)
+
+To enable Django messages, ensure you have the django.contrib.messages middleware and context processor enabled in your settings.py.
+
+# settings.py
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Handles user sessions
+    'django.contrib.messages.middleware.MessageMiddleware',  # MessageMiddleware to manage messages
+    'django.middleware.common.CommonMiddleware',
+    # ... other middleware
+]
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',  # This enables the messages framework
+    # ... other apps
+]
+-----------------------------------------------------------------------------
+#Use these below content on base.html after header place this content
+<div style="text-align: center;">
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+______________________________________________________________________________>py manage.py runserver

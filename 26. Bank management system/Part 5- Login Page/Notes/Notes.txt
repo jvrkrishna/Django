@@ -1,0 +1,199 @@
+Now we are continue from Part4
+In this we do login page(login.html)... If we successfully logged in it will redirect to welcome dash board(welcome.html). In that dashboard we have Deposit withdraw and statement tabs.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#Create login.html and welcome.html
+#login.html
+{% block content %}
+<style>
+    /* Add space below header */
+    form {
+        margin-top: 180px; /* ✅ Creates gap between header and form */
+    }
+
+    fieldset {
+        width: 400px;
+        margin: 100px auto;
+        padding: 20px;
+        text-align: center;
+        border: 2px solid #4d36c0;
+        border-radius: 10px;
+        background-color: #f9f9fc;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    legend {
+        font-weight: bold;
+        font-size: 20px;
+        color: goldenrod;
+        font-family: Arial, sans-serif;
+    }
+
+    table {
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+
+    td {
+        padding: 8px;
+    }
+
+    td:first-child {
+        text-align: right;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 180px;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+
+    button {
+        color: white;
+        background-color: #4d36c0;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        font-weight: bolder;
+        padding: 8px 20px;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #37279c;
+    }
+
+    button[type="reset"] {
+        margin-left: 10px;
+    }
+
+    a {
+        color: #4d36c0;
+        text-decoration: none;
+        font-weight: bold;
+        margin-left: 5px;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .footer-text {
+        text-align: center;
+        padding-top: 10px;
+        font-size: 13px;
+    }
+
+    center {
+        display: block;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #444;
+    }
+</style>
+
+<form method="POST">
+    {% csrf_token %}
+    <fieldset>
+        <legend>LOGIN</legend>
+
+        <table border="0">
+            <tr>
+                <td><b>USER NAME :</b></td>
+                <td> <input type="email" name="email" required
+               placeholder="you@example.com"
+               value="{{ email|default:'' }}"></td>
+            </tr>
+            <tr>
+                <td><b>PASSWORD :</b></td>
+                <td><input type="password" name="password" required></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:center; padding-top:15px;">
+                    <button type="submit">SUBMIT</button>
+                    <button type="reset">CANCEL</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="footer-text">
+                    <b>Are you registered??? <a href="{% url 'register' %}">Register</a></b>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+
+<center>Note: Click on Logo to go to Home page.</center>
+{% endblock %}
+------------------------------------------------------------------------------
+#welcome.html
+{% load static %}
+
+{%block content%}
+<style>
+    /* static/css/styles.css */
+.container {
+    text-align: center;
+    padding: 50px;
+}
+.alert {
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border-radius: 5px;
+}
+</style>
+<body>
+    <div class="container">
+        <h1>Welcome to Your Dashboard</h1>
+        <div class="alert">     
+        <p>Enjoy exploring the site, {{ user.first_name }} {{ user.last_name }}!</p>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}
+______________________________________________________________________________
+#Now we are modify the Mylogin and welcome method and create logout method. 
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth.models import User 
+
+# def Mylogin(request):
+#     return render(request,'login.html')
+
+# def welcome(request):
+#     return render(request,'welcome.html')
+def Mylogin(request):
+    if request.method == 'POST':
+        username = request.POST['email']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('welcome')  # Redirect to the 'welcome' page after login
+        else:
+            messages.error(request, 'Invalid credentials')
+            return render(request, 'login.html')  # Stay on login page with error
+
+    return render(request, 'login.html')
+
+def welcome(request):
+    return render(request, 'welcome.html')
+
+# Logout view
+def Mylogout(request):
+    logout(request) #Log out the current user
+    messages.info(request, "You have been logged out.")
+    return redirect('home')  # Redirect to home page after logout
+______________________________________________________________________________
+#Now add logout in urls.py
+path('logout/',views.Mylogout,name="logout"),
