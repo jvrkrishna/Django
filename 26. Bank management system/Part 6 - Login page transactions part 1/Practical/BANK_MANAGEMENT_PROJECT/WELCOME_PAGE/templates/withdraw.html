@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Withdraw</h2>
+<p>Current balance: ₹{{ balance }}</p>
+<form method="post">
+  {% csrf_token %}
+  {{ form.amount.label_tag }} {{ form.amount }}<br/>
+  {{ form.description.label_tag }} {{ form.description }}<br/>
+  <button type="submit">Withdraw</button>
+</form>
+{% endblock %}

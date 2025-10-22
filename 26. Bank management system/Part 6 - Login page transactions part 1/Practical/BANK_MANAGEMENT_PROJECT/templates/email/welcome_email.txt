@@ -1,0 +1,14 @@
+Congrats {{ first_name }} {{ last_name }},
+
+Your account has been successfully created at HIE TECH SOLUTIONS.
+
+Here are your account details:
+Name: {{ first_name }} {{ last_name }}
+Email: {{ email }}
+Account Number: {{ account_number }}
+
+Please login to your dashboard:
+http://127.0.0.1:8000/Mylogin/
+
+Thanks,
+HIE TECH SOLUTIONS Team

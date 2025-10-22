@@ -1,0 +1,326 @@
+Now we are continue from Part5
+After Successfull Logging in create the Deposit, Withdraw and transactions. In transactions part we have to search with particular period of time from calender to download the statement.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Day 1
+Part 1:
+    Add balance + Transaction model
+    makemigrations & migrate
+    Register Transaction in admin
+
+Part 2:
+    Add forms.py (Deposit/Withdraw/StatementFilter)
+    Create deposit/withdraw/statement templates
+    Add URLs and dashboard links
+    Run server and verify pages render
+
+Day 2
+Part 1:
+    Implement deposit, withdraw, statement, export_statement_csv views
+    Add @login_required and get_object_or_404(UserProfile, user=request.user)
+    Wire templates to POST/GET correctly and show balance
+    Manual smoke tests (deposit/withdraw/csv)
+    Add unit tests (deposit/withdraw/insufficient funds)
+    Security checks (Decimal, CSRF, permissions)
+    Commit + short docs
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Part 1:
+#Add the below filed in existing model UserProfile
+balance = models.DecimalField(max_digits=14, decimal_places=2, default=0.00)  # new field
+------------------------------------------------------------------------------
+#Now create the new model for Tansactions Part
+class Transaction(models.Model):
+    TRANSACTION_CHOICES = (
+        ('deposit', 'Deposit'),
+        ('withdraw', 'Withdraw'),
+    )
+
+    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='transactions')
+    tx_type = models.CharField(max_length=10, choices=TRANSACTION_CHOICES)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    description = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(default=datetime.now)
+    balance_after = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.profile.user.username} | {self.tx_type} | {self.amount}"
+------------------------------------------------------------------------------
+#Make migrations and migrate and add in models in admin.py
+py manage.py makemigrations WELCOME_PAGE
+py manage.py migrate
+------------------------------------------------------------------------------
+#add these model in admin.py
+from .models import Transaction
+admin.site.register(Transaction)
+______________________________________________________________________________
+Part 2:
+#Add forms.py (Deposit/Withdraw/StatementFilter) in app level
+from django import forms
+from decimal import Decimal
+from django.core.exceptions import ValidationError
+import datetime
+
+class DepositForm(forms.Form):
+    amount = forms.DecimalField(min_value=Decimal('0.01'), max_digits=12, decimal_places=2)
+    description = forms.CharField(max_length=255, required=False)
+
+    def clean_amount(self):
+        amt = self.cleaned_data['amount']
+        if amt <= 0:
+            raise ValidationError("Amount must be greater than zero.")
+        return amt
+
+
+class WithdrawForm(forms.Form):
+    amount = forms.DecimalField(min_value=Decimal('0.01'), max_digits=12, decimal_places=2)
+    description = forms.CharField(max_length=255, required=False)
+
+    def clean_amount(self):
+        amt = self.cleaned_data['amount']
+        if amt <= 0:
+            raise ValidationError("Amount must be greater than zero.")
+        return amt
+
+
+class StatementFilterForm(forms.Form):
+    choice = forms.ChoiceField(choices=(
+        ('month', 'Month'),
+        ('year', 'Year'),
+        ('range', 'Date range'),
+        ('all', 'All'),
+    ), required=False, initial='month')
+    month = forms.IntegerField(min_value=1, max_value=12, required=False)
+    year = forms.IntegerField(min_value=1900, max_value=2100, required=False)
+    date_from = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    date_to = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+
+    def clean(self):
+        cleaned = super().clean()
+        choice = cleaned.get('choice')
+        date_from = cleaned.get('date_from')
+        date_to = cleaned.get('date_to')
+
+        if choice == 'range' and date_from and date_to and date_from > date_to:
+            raise forms.ValidationError("Start date cannot be after end date.")
+        return cleaned
+------------------------------------------------------------------------------
+#Add these below lines in app level urls.py
+path('deposit/', views.deposit, name='deposit'),
+path('withdraw/', views.withdraw, name='withdraw'),
+path('statement/', views.statement, name='statement'),
+path('statement/export/csv/', views.export_statement_csv, name='export_statement_csv'),
+
+#Add links/buttons in welcome.html that point to these routes.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+</head>
+<body>
+    <h1>Welcome to Your Dashboard</h1>
+
+    <!-- Add Links to Routes -->
+    <ul>
+        <li><a href="{% url 'deposit' %}">Deposit</a></li>
+        <li><a href="{% url 'withdraw' %}">Withdraw</a></li>
+        <li><a href="{% url 'statement' %}">View Statement</a></li>
+        <li><a href="{% url 'export_statement_csv' %}">Export Statement (CSV)</a></li>
+    </ul>
+</body>
+</html>
+------------------------------------------------------------------------------
+# Create deposit/withdraw/statement templates
+#deposit.html
+{% extends "base.html" %}
+{% block content %}
+<h2>Deposit</h2>
+<p>Current balance: ₹{{ balance }}</p>
+<form method="post">
+  {% csrf_token %}
+  {{ form.amount.label_tag }} {{ form.amount }}<br/>
+  {{ form.description.label_tag }} {{ form.description }}<br/>
+  <button type="submit">Deposit</button>
+</form>
+{% endblock %}
+------------------------------------------------------------------------------
+#withdraw.html
+{% extends "base.html" %}
+{% block content %}
+<h2>Withdraw</h2>
+<p>Current balance: ₹{{ balance }}</p>
+<form method="post">
+  {% csrf_token %}
+  {{ form.amount.label_tag }} {{ form.amount }}<br/>
+  {{ form.description.label_tag }} {{ form.description }}<br/>
+  <button type="submit">Withdraw</button>
+</form>
+{% endblock %}
+------------------------------------------------------------------------------
+#statement.html
+{% extends "base.html" %}
+{% block content %}
+<h2>Statement</h2>
+<p>Current balance: ₹{{ balance }}</p>
+
+<form method="get" action="{% url 'statement' %}">
+  {{ form.choice }} 
+  <!-- render fields; for simplicity you can show month/year inputs and date inputs -->
+  Month: {{ form.month }} Year: {{ form.year }}
+  From: {{ form.date_from }} To: {{ form.date_to }}
+  <button type="submit">Filter</button>
+  <a href="{% url 'export_statement_csv' %}?{{ request.GET.urlencode }}">Download CSV</a>
+</form>
+
+<table>
+  <thead>
+    <tr><th>Date</th><th>Type</th><th>Amount</th><th>Balance After</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    {% for tx in transactions %}
+      <tr>
+        <td>{{ tx.created_at }}</td>
+        <td>{{ tx.get_tx_type_display }}</td>
+        <td>{{ tx.amount }}</td>
+        <td>{{ tx.balance_after }}</td>
+        <td>{{ tx.description }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5">No transactions found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+------------------------------------------------------------------------------
+Day 1 Tasks to run:
+python manage.py runserver
+Now check the Links after success logging in and check the model in transactions part.
+______________________________________________________________________________
+#Day 2:
+#Part 1:
+    #Implement deposit, withdraw, statement, export_statement_csv views
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.db.models import F
+from django.http import HttpResponse
+from decimal import Decimal
+import csv
+from .forms import DepositForm, WithdrawForm, StatementFilterForm
+from .models import UserProfile, Transaction
+from django.contrib import messages
+from django.utils import timezone
+from datetime import date
+
+@login_required
+def deposit(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+    if request.method == 'POST':
+        form = DepositForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
+            description = form.cleaned_data.get('description', '')
+            with transaction.atomic():
+                UserProfile.objects.filter(pk=profile.pk).update(balance=F('balance') + amount)
+                profile.refresh_from_db()
+                Transaction.objects.create(profile=profile, tx_type='deposit', amount=amount,
+                                           description=description, balance_after=profile.balance)
+            messages.success(request, f"Deposit successful. New balance: ₹{profile.balance:.2f}")
+            return redirect('deposit')
+    else:
+        form = DepositForm()
+    return render(request, 'deposit.html', {'form': form, 'balance': profile.balance})
+
+@login_required
+def withdraw(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+    if request.method == 'POST':
+        form = WithdrawForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
+            description = form.cleaned_data.get('description', '')
+            with transaction.atomic():
+                profile_locked = UserProfile.objects.select_for_update().get(pk=profile.pk)
+                if profile_locked.balance < amount:
+                    messages.error(request, "Insufficient balance.")
+                    return render(request, 'WELCOME_PAGE/withdraw.html', {'form': form, 'balance': profile_locked.balance})
+                UserProfile.objects.filter(pk=profile.pk).update(balance=F('balance') - amount)
+                profile_locked.refresh_from_db()
+                Transaction.objects.create(profile=profile_locked, tx_type='withdraw', amount=amount,
+                                           description=description, balance_after=profile_locked.balance)
+            messages.success(request, f"Withdrawal successful. New balance: ₹{profile_locked.balance:.2f}")
+            return redirect('withdraw')
+    else:
+        form = WithdrawForm()
+    return render(request, 'withdraw.html', {'form': form, 'balance': profile.balance})
+
+@login_required
+def statement(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+    form = StatementFilterForm(request.GET or None)
+    txs = Transaction.objects.filter(profile=profile)
+    if not request.GET:
+        since = timezone.now() - timezone.timedelta(days=30)
+        txs = txs.filter(created_at__gte=since)
+    if form.is_valid():
+        choice = form.cleaned_data.get('choice')
+        month = form.cleaned_data.get('month')
+        year = form.cleaned_data.get('year')
+        date_from = form.cleaned_data.get('date_from')
+        date_to = form.cleaned_data.get('date_to')
+        if choice == 'month' and month and year:
+            start = date(year, month, 1)
+            end = date(year + 1 if month==12 else year, 1 if month==12 else month+1, 1)
+            txs = txs.filter(created_at__gte=start, created_at__lt=end)
+        elif choice == 'year' and year:
+            start, end = date(year,1,1), date(year+1,1,1)
+            txs = txs.filter(created_at__gte=start, created_at__lt=end)
+        elif choice == 'range' and date_from:
+            if date_to:
+                txs = txs.filter(created_at__date__gte=date_from, created_at__date__lte=date_to)
+            else:
+                txs = txs.filter(created_at__date__gte=date_from)
+    txs = txs.order_by('-created_at')[:1000]
+    return render(request, 'statement.html', {'form': form, 'transactions': txs,'balance': profile.balance, 'request': request})
+
+@login_required
+def export_statement_csv(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+    form = StatementFilterForm(request.GET or None)
+    txs = Transaction.objects.filter(profile=profile)
+    if form.is_valid():
+        choice = form.cleaned_data.get('choice')
+        month = form.cleaned_data.get('month')
+        year = form.cleaned_data.get('year')
+        date_from = form.cleaned_data.get('date_from')
+        date_to = form.cleaned_data.get('date_to')
+        if choice == 'month' and month and year:
+            start = date(year, month, 1)
+            end = date(year + 1 if month==12 else year, 1 if month==12 else month+1, 1)
+            txs = txs.filter(created_at__gte=start, created_at__lt=end)
+        elif choice == 'year' and year:
+            start, end = date(year,1,1), date(year+1,1,1)
+            txs = txs.filter(created_at__gte=start, created_at__lt=end)
+        elif choice == 'range' and date_from:
+            if date_to:
+                txs = txs.filter(created_at__date__gte=date_from, created_at__date__lte=date_to)
+            else:
+                txs = txs.filter(created_at__date__gte=date_from)
+    txs = txs.order_by('-created_at')
+    response = HttpResponse(content_type='text/csv')
+    filename = f"statement_{profile.user.username}_{timezone.now().strftime('%Y%m%d_%H%M%S')}.csv"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    writer = csv.writer(response)
+    writer.writerow(['Date','Type','Amount','Balance After','Description'])
+    for t in txs:
+        writer.writerow([t.created_at.strftime('%Y-%m-%d %H:%M:%S'), t.get_tx_type_display(),
+                         f"{t.amount:.2f}", f"{t.balance_after:.2f}" if t.balance_after else '', t.description])
+    return response
+------------------------------------------------------------------------------
+
+
+
