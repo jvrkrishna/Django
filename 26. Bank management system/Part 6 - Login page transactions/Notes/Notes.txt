@@ -321,6 +321,5 @@ def export_statement_csv(request):
                          f"{t.amount:.2f}", f"{t.balance_after:.2f}" if t.balance_after else '', t.description])
     return response
 ------------------------------------------------------------------------------
-
-
+>py manage.py runserver
 
