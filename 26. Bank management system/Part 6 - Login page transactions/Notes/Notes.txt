@@ -1,7 +1,5 @@
 Now we are continue from Part5
 After Successfull Logging in create the Deposit, Withdraw and transactions. In transactions part we have to search with particular period of time from calender to download the statement.
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Day 1
 Part 1:
     Add balance + Transaction model
     makemigrations & migrate
@@ -13,15 +11,12 @@ Part 2:
     Add URLs and dashboard links
     Run server and verify pages render
 
-Day 2
-Part 1:
+Part 3:
     Implement deposit, withdraw, statement, export_statement_csv views
     Add @login_required and get_object_or_404(UserProfile, user=request.user)
     Wire templates to POST/GET correctly and show balance
-    Manual smoke tests (deposit/withdraw/csv)
-    Add unit tests (deposit/withdraw/insufficient funds)
-    Security checks (Decimal, CSRF, permissions)
-    Commit + short docs
+    Run server
+    
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Part 1:
 #Add the below filed in existing model UserProfile
@@ -199,8 +194,7 @@ Day 1 Tasks to run:
 python manage.py runserver
 Now check the Links after success logging in and check the model in transactions part.
 ______________________________________________________________________________
-#Day 2:
-#Part 1:
+#Part 3:
     #Implement deposit, withdraw, statement, export_statement_csv views
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -322,4 +316,5 @@ def export_statement_csv(request):
     return response
 ------------------------------------------------------------------------------
 >py manage.py runserver
+
 
