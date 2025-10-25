@@ -11,5 +11,4 @@ urlpatterns = [
     path('deposit/', views.deposit, name='deposit'),
     path('withdraw/', views.withdraw, name='withdraw'),
     path('statement/', views.statement, name='statement'),
-    path('statement/export/csv/', views.export_statement_csv, name='export_statement_csv'),
 ]

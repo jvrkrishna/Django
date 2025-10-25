@@ -4,17 +4,24 @@
 <p>Current balance: ₹{{ balance }}</p>
 
 <form method="get" action="{% url 'statement' %}">
-  {{ form.choice }} 
-  <!-- render fields; for simplicity you can show month/year inputs and date inputs -->
-  Month: {{ form.month }} Year: {{ form.year }}
-  From: {{ form.date_from }} To: {{ form.date_to }}
+  {{ form.choice }}
+  Month: {{ form.month }} 
+  Year: {{ form.year }}
+  From: {{ form.date_from }} 
+  To: {{ form.date_to }}
   <button type="submit">Filter</button>
-  <a href="{% url 'export_statement_csv' %}?{{ request.GET.urlencode }}">Download CSV</a>
+  <button type="submit" name="download" value="1">Download CSV</button>
 </form>
 
-<table>
+<table border="1">
   <thead>
-    <tr><th>Date</th><th>Type</th><th>Amount</th><th>Balance After</th><th>Description</th></tr>
+    <tr>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Amount</th>
+      <th>Balance After</th>
+      <th>Description</th>
+    </tr>
   </thead>
   <tbody>
     {% for tx in transactions %}

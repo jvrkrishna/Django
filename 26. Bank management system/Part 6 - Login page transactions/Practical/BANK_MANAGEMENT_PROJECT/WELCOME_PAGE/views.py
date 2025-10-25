@@ -231,60 +231,56 @@ def statement(request):
     profile = get_object_or_404(UserProfile, user=request.user)
     form = StatementFilterForm(request.GET or None)
     txs = Transaction.objects.filter(profile=profile)
+
+    # Default: last 30 days
     if not request.GET:
         since = timezone.now() - timezone.timedelta(days=30)
         txs = txs.filter(created_at__gte=since)
-    if form.is_valid():
-        choice = form.cleaned_data.get('choice')
-        month = form.cleaned_data.get('month')
-        year = form.cleaned_data.get('year')
-        date_from = form.cleaned_data.get('date_from')
-        date_to = form.cleaned_data.get('date_to')
-        if choice == 'month' and month and year:
-            start = date(year, month, 1)
-            end = date(year + 1 if month==12 else year, 1 if month==12 else month+1, 1)
-            txs = txs.filter(created_at__gte=start, created_at__lt=end)
-        elif choice == 'year' and year:
-            start, end = date(year,1,1), date(year+1,1,1)
-            txs = txs.filter(created_at__gte=start, created_at__lt=end)
-        elif choice == 'range' and date_from:
-            if date_to:
-                txs = txs.filter(created_at__date__gte=date_from, created_at__date__lte=date_to)
-            else:
-                txs = txs.filter(created_at__date__gte=date_from)
-    txs = txs.order_by('-created_at')[:1000]
-    return render(request, 'statement.html', {'form': form, 'transactions': txs,'balance': profile.balance, 'request': request})
 
-@login_required
-def export_statement_csv(request):
-    profile = get_object_or_404(UserProfile, user=request.user)
-    form = StatementFilterForm(request.GET or None)
-    txs = Transaction.objects.filter(profile=profile)
+    # Apply filters
     if form.is_valid():
         choice = form.cleaned_data.get('choice')
         month = form.cleaned_data.get('month')
         year = form.cleaned_data.get('year')
         date_from = form.cleaned_data.get('date_from')
         date_to = form.cleaned_data.get('date_to')
+
         if choice == 'month' and month and year:
             start = date(year, month, 1)
-            end = date(year + 1 if month==12 else year, 1 if month==12 else month+1, 1)
+            end = date(year + 1 if month == 12 else year, 1 if month == 12 else month + 1, 1)
             txs = txs.filter(created_at__gte=start, created_at__lt=end)
         elif choice == 'year' and year:
-            start, end = date(year,1,1), date(year+1,1,1)
+            start, end = date(year, 1, 1), date(year + 1, 1, 1)
             txs = txs.filter(created_at__gte=start, created_at__lt=end)
         elif choice == 'range' and date_from:
             if date_to:
                 txs = txs.filter(created_at__date__gte=date_from, created_at__date__lte=date_to)
             else:
                 txs = txs.filter(created_at__date__gte=date_from)
+
     txs = txs.order_by('-created_at')
-    response = HttpResponse(content_type='text/csv')
-    filename = f"statement_{profile.user.username}_{timezone.now().strftime('%Y%m%d_%H%M%S')}.csv"
-    response['Content-Disposition'] = f'attachment; filename="{filename}"'
-    writer = csv.writer(response)
-    writer.writerow(['Date','Type','Amount','Balance After','Description'])
-    for t in txs:
-        writer.writerow([t.created_at.strftime('%Y-%m-%d %H:%M:%S'), t.get_tx_type_display(),
-                         f"{t.amount:.2f}", f"{t.balance_after:.2f}" if t.balance_after else '', t.description])
-    return response
+
+    # 🟢 If user clicked "Download CSV", handle here
+    if 'download' in request.GET:
+        response = HttpResponse(content_type='text/csv; charset=utf-8')
+        response['Content-Disposition'] = f'attachment; filename=statement_{request.user.username}.csv'
+        response.write('\ufeff')  # Write UTF-8 BOM to help Excel detect encoding
+        writer = csv.writer(response)
+        writer.writerow(['Date', 'Type', 'Amount', 'Balance After', 'Description'])
+        for tx in txs:
+            writer.writerow([
+                tx.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                tx.get_tx_type_display(),
+                f"₹{tx.amount}",
+                f"₹{tx.balance_after}",
+                tx.description or ''
+            ])
+        return response
+
+    # Otherwise, just render normally
+    return render(request, 'statement.html', {
+        'form': form,
+        'transactions': txs,
+        'balance': profile.balance,
+        'request': request
+    })
