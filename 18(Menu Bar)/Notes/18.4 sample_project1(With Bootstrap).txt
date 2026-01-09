@@ -239,8 +239,26 @@ app1/templates/app1/
 <img src="{{ MEDIA_URL }}sample.jpg" class="img-fluid rounded shadow">
 {% endblock %}
 
-🔹 Step 8: URL Configuration
+📄 about.html
+{% extends 'base.html' %}
+{% block title %}App About{% endblock %}
 
+{% block content %}
+<h1>App1 About Page</h1>
+<img src="{{ MEDIA_URL }}sample.jpg" class="img-fluid rounded shadow">
+{% endblock %}
+
+📄 contact.html
+{% extends 'base.html' %}
+{% block title %}App Contact{% endblock %}
+
+{% block content %}
+<h1>App1 Contact Page</h1>
+<img src="{{ MEDIA_URL }}sample.jpg" class="img-fluid rounded shadow">
+{% endblock %}
+
+
+🔹 Step 8: URL Configuration
 📄 app1/urls.py
 from django.urls import path
 from . import views
