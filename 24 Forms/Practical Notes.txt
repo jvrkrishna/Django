@@ -1,0 +1,165 @@
+#########Django Contact Form########
+🔹 Step 1: Install Django
+First, make sure Django is installed.
+pip install django
+
+Check version:
+django-admin --version
+
+🔹 Step 2: Create Django Project
+Create a project called contactproject.
+
+django-admin startproject contactproject
+cd contactproject
+
+Project structure now:
+contactproject/
+│── contactproject/
+│   ├── settings.py
+│   ├── urls.py
+│   └── ...
+│── manage.py
+
+🔹 Step 3: Create App
+Create an app called contact.
+python manage.py startapp contact
+
+Now structure:
+contactproject/
+│── contact/
+│   ├── views.py
+│   ├── forms.py
+│   └── ...
+
+🔹 Step 4: Register App
+Open settings.py and add the app:
+INSTALLED_APPS = [
+    'contact',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    ...
+]
+
+🔹 Step 5: Create Contact Form
+Create forms.py inside contact app.
+
+contact/forms.py
+
+from django import forms
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=50)
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea)
+
+✔ This form is not connected to database
+✔ Used only to collect user input
+
+🔹 Step 6: Create View
+Open views.py.
+contact/views.py
+
+from django.shortcuts import render
+from .forms import ContactForm
+def contact_view(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+
+            print(name, email, message)  # for testing
+
+            return render(request, 'success.html')
+    else:
+        form = ContactForm()
+
+    return render(request, 'contact.html', {'form': form})
+
+✔ Handles GET and POST
+✔ Validates data
+✔ Displays success page
+
+🔹 Step 7: Create URLs
+contact/urls.py
+Create this file manually.
+
+from django.urls import path
+from .views import contact_view
+urlpatterns = [
+    path('', contact_view, name='contact'),
+]
+
+🔹 Step 8: Connect App URLs to Project
+Open contactproject/urls.py.
+
+from django.contrib import admin
+from django.urls import path, include
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('contact.urls')),
+]
+
+🔹 Step 9: Create Templates
+Inside contact app, create folders:
+
+contact/
+│── templates/
+│   ├── contact.html
+│   ├── success.html
+
+contact/templates/contact.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Form</title>
+</head>
+<body>
+    <h2>Contact Us</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
+
+contact/templates/success.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Success</title>
+</head>
+<body>
+    <h2>Thank you!</h2>
+    <p>Your message has been submitted successfully.</p>
+</body>
+</html>
+
+🔹 Step 10: Run Migrations
+Even though we don’t use DB, Django still needs default migrations.
+python manage.py migrate
+
+🔹 Step 11: Run Server 🚀
+python manage.py runserver
+
+Open browser:
+http://127.0.0.1:8000/
+
+
+🎉 Your Contact Form is LIVE
+🔹 What Happens When You Submit?
+User fills form
+Data goes to Django view
+Django validates data
+If valid → success page shown
+Data printed in terminal
+
+🔹 Simple Flow Diagram
+Browser → URL → View → Form Validation → Template
+
+🔹 Key Points to Remember (Exam Gold ⭐)
+forms.Form → No database
+request.POST → Form data
+form.is_valid() → Validation
+csrf_token → Security
