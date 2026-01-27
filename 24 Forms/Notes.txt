@@ -1,4 +1,4 @@
-Django Forms — Simple Notes
+Django Forms
 What are Forms in Django?
 Forms in Django are used to collect user input, validate data, and save it to the database.
 
